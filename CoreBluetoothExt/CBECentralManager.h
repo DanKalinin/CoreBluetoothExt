@@ -6,7 +6,7 @@
 //
 
 #import <CoreBluetooth/CoreBluetooth.h>
-#import <Helpers/Helpers.h>
+#import <FoundationExt/FoundationExt.h>
 #import "CBEMain.h"
 
 //@class CBECharacteristicReading;
