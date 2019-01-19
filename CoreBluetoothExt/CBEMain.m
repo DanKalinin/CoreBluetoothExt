@@ -7,4 +7,4 @@
 
 #import "CBEMain.h"
 
-NSErrorDomain const CBEErrorDomain = @"CBE";
+//NSErrorDomain const CBEErrorDomain = @"CBE";
