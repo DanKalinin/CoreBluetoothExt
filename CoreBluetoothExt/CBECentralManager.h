@@ -6,6 +6,7 @@
 //
 
 #import "CBEManager.h"
+#import "CBEPeripheral.h"
 
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
@@ -69,7 +70,7 @@
 
 
 
-@protocol CBECentralManagerDelegate <CBEManagerDelegate>
+@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate>
 
 @optional
 - (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;

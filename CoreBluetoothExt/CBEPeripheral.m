@@ -91,6 +91,7 @@
 
 @implementation CBEPeripheralOperation
 
+@dynamic delegates;
 @dynamic object;
 
 - (instancetype)initWithObject:(CBPeripheral *)object {

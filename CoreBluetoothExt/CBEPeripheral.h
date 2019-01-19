@@ -69,6 +69,7 @@
 @protocol CBEPeripheralDelegate <CBEPeerDelegate>
 
 @optional
+- (void)cbePeripheralDidConnect:(CBPeripheral *)peripheral;
 - (void)cbePeripheralDidDisconnect:(CBPeripheral *)peripheral;
 - (void)cbePeripheralDidCancelConnection:(CBPeripheral *)peripheral;
 
@@ -79,6 +80,8 @@
 @interface CBEPeripheralOperation : CBEPeerOperation <CBEPeripheralDelegate, CBPeripheralDelegate>
 
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
+
+@property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;
 
 @property (weak, readonly) CBPeripheral *object;
 

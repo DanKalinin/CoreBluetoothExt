@@ -119,4 +119,8 @@
     [self.delegates cbeCentralManagerDidDiscoverPeripheral:central];
 }
 
+- (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
+    [peripheral.nseOperation.delegates cbePeripheralDidConnect:peripheral];
+}
+
 @end
