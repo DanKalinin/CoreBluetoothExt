@@ -91,6 +91,7 @@
 
 @implementation CBEPeripheralOperation
 
+@dynamic parent;
 @dynamic delegates;
 @dynamic object;
 

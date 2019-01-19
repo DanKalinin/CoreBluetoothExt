@@ -9,6 +9,7 @@
 
 @class CBEPeripheral;
 @class CBEPeripheralOperation;
+@class CBECentralManagerOperation;
 
 @protocol CBEPeripheralDelegate;
 
@@ -81,6 +82,7 @@
 
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
 
+@property (readonly) CBECentralManagerOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;
 
 @property (weak, readonly) CBPeripheral *object;
