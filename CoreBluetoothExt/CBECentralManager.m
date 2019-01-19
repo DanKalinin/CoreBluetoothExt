@@ -123,4 +123,13 @@
     [peripheral.nseOperation.delegates cbePeripheralDidConnect:peripheral];
 }
 
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    if (error) {
+        peripheral.nseOperation.didDisconnect = [CBEPeripheralDidDisconnect.alloc initWithError:error].nseAutorelease;
+        [peripheral.nseOperation.delegates cbePeripheralDidDisconnect:peripheral];
+    } else {
+        [peripheral.nseOperation.delegates cbePeripheralDidCancelConnection:peripheral];
+    }
+}
+
 @end
