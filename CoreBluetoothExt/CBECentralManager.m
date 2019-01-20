@@ -89,6 +89,8 @@
 
 @interface CBECentralManagerOperation ()
 
+@property NSMutableOrderedSet<CBPeripheral *> *peripherals;
+
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 
 @end
@@ -105,6 +107,8 @@
     
     object.delegate = self;
     
+    self.peripherals = NSMutableOrderedSet.orderedSet;
+    
     return self;
 }
 
@@ -115,6 +119,10 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
+    [self.peripherals addObject:peripheral];
+    
+    [peripheral.nseOperation.delegates addObject:self.delegates];
+    
     CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
     
     peripheral.nseOperation.advertisement = advertisement;

@@ -83,6 +83,7 @@
 @interface CBECentralManagerOperation : CBEManagerOperation <CBECentralManagerDelegate, CBCentralManagerDelegate>
 
 @property (readonly) NSMutableOrderedSet<CBECentralManagerDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBPeripheral *> *peripherals;
 
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
