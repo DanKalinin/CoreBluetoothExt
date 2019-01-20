@@ -116,6 +116,11 @@
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     [self.delegates cbeCentralManagerDidUpdateState:central];
+    
+    if (central.state == CBManagerStatePoweredOn) {
+    } else {
+        [self.peripherals removeAllObjects];
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
