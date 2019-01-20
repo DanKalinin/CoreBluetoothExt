@@ -13,3 +13,4 @@ FOUNDATION_EXPORT const unsigned char CoreBluetoothExtVersionString[];
 
 #import <CoreBluetoothExt/CBEMain.h>
 #import <CoreBluetoothExt/CBECentralManager.h>
+#import <CoreBluetoothExt/CBEPeripheral.h>

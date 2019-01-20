@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeripheral.h"
+#import "CBECentralManager.h"
 
 
 
@@ -132,6 +133,14 @@
     object.delegate = self;
     
     return self;
+}
+
+- (void)connectWithOptions:(NSDictionary *)options {
+    [self.parent.object connectPeripheral:self.object options:options];
+}
+
+- (void)cancelConnection {
+    [self.parent.object cancelPeripheralConnection:self.object];
 }
 
 @end
