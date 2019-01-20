@@ -125,12 +125,39 @@
 
 @implementation CBEPeripheralConnection
 
+@dynamic delegates;
+
 - (instancetype)initWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
     self = [super initWithTimeout:timeout];
     
     self.options = options;
     
     return self;
+}
+
+- (void)updateState:(NSEOperationState)state {
+    [super updateState:state];
+    
+    [self.delegates cbePeripheralConnectionDidUpdateState:self];
+    if (state == NSEOperationStateDidStart) {
+        [self.delegates cbePeripheralConnectionDidStart:self];
+    } else if (state == NSEOperationStateDidCancel) {
+        [self.delegates cbePeripheralConnectionDidCancel:self];
+    } else if (state == NSEOperationStateDidFinish) {
+        [self.delegates cbePeripheralConnectionDidFinish:self];
+    }
+}
+
+- (void)updateProgress:(int64_t)completedUnitCount {
+    [super updateProgress:completedUnitCount];
+    
+    [self.delegates cbePeripheralConnectionDidUpdateProgress:self];
+}
+
+#pragma mark - CBEPeripheralConnectionDelegate
+
+- (void)cbePeripheralConnectionDidStart:(CBEPeripheralConnection *)connection {
+    NSLog(@"parent - %@", self.parent.parent);
 }
 
 @end
@@ -165,6 +192,8 @@
 }
 
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    [self.parent.peripherals addObject:self.object];
+    
     CBEPeripheralConnection *connection = [CBEPeripheralConnection.alloc initWithOptions:options timeout:timeout];
     
     [self addOperation:connection];

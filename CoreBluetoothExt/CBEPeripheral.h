@@ -103,6 +103,7 @@
 
 @interface CBEPeripheralConnection : NSETimeoutOperation <CBEPeripheralConnectionDelegate>
 
+@property (readonly) NSMutableOrderedSet<CBEPeripheralConnectionDelegate> *delegates;
 @property (readonly) NSDictionary *options;
 
 - (instancetype)initWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
@@ -118,7 +119,7 @@
 
 
 
-@protocol CBEPeripheralDelegate <CBEPeerDelegate>
+@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralConnectionDelegate>
 
 @optional
 - (void)cbePeripheralDidDisconnect:(CBPeripheral *)peripheral;
