@@ -43,6 +43,12 @@
 
 @implementation CBECentralManager
 
+- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options {
+    [super connectPeripheral:peripheral options:options];
+    
+    [self.nseOperation connectPeripheral:peripheral options:options];
+}
+
 @end
 
 
@@ -89,7 +95,7 @@
 
 @interface CBECentralManagerOperation ()
 
-@property NSMutableOrderedSet<CBPeripheral *> *peripherals;
+@property NSMutableSet<CBPeripheral *> *peripherals;
 
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 
@@ -107,9 +113,15 @@
     
     object.delegate = self;
     
-    self.peripherals = NSMutableOrderedSet.orderedSet;
+    self.peripherals = NSMutableSet.set;
     
     return self;
+}
+
+- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options {
+    [self.peripherals addObject:peripheral];
+    
+    [peripheral.nseOperation.delegates addObject:self.delegates];
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -124,10 +136,6 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
-    [self.peripherals addObject:peripheral];
-    
-    [peripheral.nseOperation.delegates addObject:self.delegates];
-    
     CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
     
     peripheral.nseOperation.advertisement = advertisement;
