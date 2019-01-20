@@ -166,6 +166,8 @@
     } else {
         [peripheral.nseOperation.delegates cbePeripheralDidCancelConnection:peripheral];
     }
+    
+    [self.peripherals removeObject:peripheral];
 }
 
 @end
