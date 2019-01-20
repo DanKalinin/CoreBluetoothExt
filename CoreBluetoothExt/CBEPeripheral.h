@@ -108,7 +108,4 @@
 
 @property (weak, readonly) CBPeripheral *object;
 
-- (void)connectWithOptions:(NSDictionary *)options;
-- (void)cancelConnection;
-
 @end
