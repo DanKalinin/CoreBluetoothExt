@@ -10,10 +10,12 @@
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralDidDisconnect;
+@class CBEPeripheralConnection;
 @class CBEPeripheralOperation;
 @class CBECentralManagerOperation;
 
 @protocol CBEPeripheralDelegate;
+@protocol CBEPeripheralConnectionDelegate;
 
 
 
@@ -85,10 +87,40 @@
 
 
 
+@protocol CBEPeripheralConnectionDelegate <NSETimeoutOperationDelegate>
+
+@optional
+- (void)cbePeripheralConnectionDidUpdateState:(CBEPeripheralConnection *)connection;
+- (void)cbePeripheralConnectionDidStart:(CBEPeripheralConnection *)connection;
+- (void)cbePeripheralConnectionDidCancel:(CBEPeripheralConnection *)connection;
+- (void)cbePeripheralConnectionDidFinish:(CBEPeripheralConnection *)connection;
+
+- (void)cbePeripheralConnectionDidUpdateProgress:(CBEPeripheralConnection *)connection;
+
+@end
+
+
+
+@interface CBEPeripheralConnection : NSETimeoutOperation <CBEPeripheralConnectionDelegate>
+
+@property (readonly) NSDictionary *options;
+
+- (instancetype)initWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate>
 
 @optional
-- (void)cbePeripheralDidConnect:(CBPeripheral *)peripheral;
 - (void)cbePeripheralDidDisconnect:(CBPeripheral *)peripheral;
 - (void)cbePeripheralDidCancelConnection:(CBPeripheral *)peripheral;
 
@@ -107,5 +139,8 @@
 @property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;
 
 @property (weak, readonly) CBPeripheral *object;
+
+- (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end

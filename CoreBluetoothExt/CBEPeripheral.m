@@ -115,6 +115,35 @@
 
 
 
+@interface CBEPeripheralConnection ()
+
+@property NSDictionary *options;
+
+@end
+
+
+
+@implementation CBEPeripheralConnection
+
+- (instancetype)initWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
+    
+    self.options = options;
+    
+    return self;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralOperation ()
 
 @end
@@ -133,6 +162,22 @@
     object.delegate = self;
     
     return self;
+}
+
+- (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    CBEPeripheralConnection *connection = [CBEPeripheralConnection.alloc initWithOptions:options timeout:timeout];
+    
+    [self addOperation:connection];
+    
+    return connection;
+}
+
+- (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralConnection *connection = [self connectWithOptions:options timeout:timeout];
+    
+    connection.completion = completion;
+    
+    return connection;
 }
 
 @end

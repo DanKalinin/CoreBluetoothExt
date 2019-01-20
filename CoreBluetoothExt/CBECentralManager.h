@@ -91,6 +91,4 @@
 - (NSArray<CBPeripheral *> *)retrievePeripheralsWithIdentifiers:(NSArray<NSUUID *> *)identifiers;
 - (NSArray<CBPeripheral *> *)retrieveConnectedPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs;
 
-- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options;
-
 @end

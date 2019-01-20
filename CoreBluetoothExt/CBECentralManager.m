@@ -43,12 +43,6 @@
 
 @implementation CBECentralManager
 
-- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options {
-    [super connectPeripheral:peripheral options:options];
-    
-    [self.nseOperation connectPeripheral:peripheral options:options];
-}
-
 @end
 
 
@@ -138,10 +132,6 @@
     return peripherals;
 }
 
-- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options {
-    [self.peripherals addObject:peripheral];
-}
-
 #pragma mark - CBCentralManagerDelegate
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
@@ -166,7 +156,7 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    [peripheral.nseOperation.delegates cbePeripheralDidConnect:peripheral];
+    
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
