@@ -88,6 +88,9 @@
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 
+- (NSArray<CBPeripheral *> *)retrievePeripheralsWithIdentifiers:(NSArray<NSUUID *> *)identifiers;
+- (NSArray<CBPeripheral *> *)retrieveConnectedPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs;
+
 - (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options;
 
 @end

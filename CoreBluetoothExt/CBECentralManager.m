@@ -118,10 +118,28 @@
     return self;
 }
 
+- (NSArray<CBPeripheral *> *)retrievePeripheralsWithIdentifiers:(NSArray<NSUUID *> *)identifiers {
+    NSArray *peripherals = [self.object retrievePeripheralsWithIdentifiers:identifiers];
+    
+    for (CBPeripheral *peripheral in peripherals) {
+        [peripheral.nseOperation.delegates addObject:self.delegates];
+    }
+    
+    return peripherals;
+}
+
+- (NSArray<CBPeripheral *> *)retrieveConnectedPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs {
+    NSArray *peripherals = [self.object retrieveConnectedPeripheralsWithServices:serviceUUIDs];
+    
+    for (CBPeripheral *peripheral in peripherals) {
+        [peripheral.nseOperation.delegates addObject:self.delegates];
+    }
+    
+    return peripherals;
+}
+
 - (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options {
     [self.peripherals addObject:peripheral];
-    
-    [peripheral.nseOperation.delegates addObject:self.delegates];
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -136,6 +154,8 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
+    [peripheral.nseOperation.delegates addObject:self.delegates];
+    
     CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
     
     peripheral.nseOperation.advertisement = advertisement;
