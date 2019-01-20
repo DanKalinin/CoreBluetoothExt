@@ -57,7 +57,7 @@
 @interface CBECentralManagerDidDiscoverPeripheral ()
 
 @property CBPeripheral *peripheral;
-@property NSDictionary *advertisementData;
+@property CBEPeripheralAdvertisement *advertisement;
 @property NSNumber *rssi;
 
 @end
@@ -66,11 +66,11 @@
 
 @implementation CBECentralManagerDidDiscoverPeripheral
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData rssi:(NSNumber *)rssi {
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEPeripheralAdvertisement *)advertisement rssi:(NSNumber *)rssi {
     self = super.init;
     
     self.peripheral = peripheral;
-    self.advertisementData = advertisementData;
+    self.advertisement = advertisement;
     self.rssi = rssi;
     
     return self;
@@ -115,7 +115,12 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
-    self.didDiscoverPeripheral = [CBECentralManagerDidDiscoverPeripheral.alloc initWithPeripheral:peripheral advertisementData:advertisementData rssi:RSSI].nseAutorelease;
+    CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
+    
+    peripheral.nseOperation.advertisement = advertisement;
+    peripheral.nseOperation.rssi = RSSI;
+    
+    self.didDiscoverPeripheral = [CBECentralManagerDidDiscoverPeripheral.alloc initWithPeripheral:peripheral advertisement:advertisement rssi:RSSI].nseAutorelease;
     [self.delegates cbeCentralManagerDidDiscoverPeripheral:central];
 }
 

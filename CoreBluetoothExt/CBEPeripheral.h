@@ -8,6 +8,8 @@
 #import "CBEPeer.h"
 
 @class CBEPeripheral;
+@class CBEPeripheralAdvertisement;
+@class CBEPeripheralDidDisconnect;
 @class CBEPeripheralOperation;
 @class CBECentralManagerOperation;
 
@@ -50,6 +52,22 @@
 
 
 
+@interface CBEPeripheralAdvertisement : NSEDictionaryObject
+
+@property (readonly) NSArray<CBUUID *> *serviceUUIDs;
+@property (readonly) BOOL isConnectable;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralDidDisconnect : NSEObject
 
 @property (readonly) NSError *error;
@@ -79,6 +97,9 @@
 
 
 @interface CBEPeripheralOperation : CBEPeerOperation <CBEPeripheralDelegate, CBPeripheralDelegate>
+
+@property CBEPeripheralAdvertisement *advertisement;
+@property NSNumber *rssi;
 
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
 
