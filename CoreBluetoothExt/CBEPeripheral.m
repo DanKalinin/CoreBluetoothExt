@@ -158,9 +158,17 @@
 #pragma mark - CBEPeripheralConnectionDelegate
 
 - (void)cbePeripheralConnectionDidStart:(CBEPeripheralConnection *)connection {
-    self.parent.connection = self;
+    if (self.parent.object.state == CBPeripheralStateConnected) {
+        [self finish];
+    } else {
+        self.parent.connection = self;
+        
+        [self.parent.parent.object connectPeripheral:self.parent.object options:self.options];
+    }
+}
+
+- (void)cbePeripheralConnectionDidCancel:(CBEPeripheralConnection *)connection {
     
-    [self.parent.parent.object connectPeripheral:self.parent.object options:self.options];
 }
 
 @end
