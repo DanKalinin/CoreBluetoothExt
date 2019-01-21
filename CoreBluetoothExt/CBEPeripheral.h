@@ -103,6 +103,7 @@
 
 @interface CBEPeripheralConnection : NSETimeoutOperation <CBEPeripheralConnectionDelegate>
 
+@property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralConnectionDelegate> *delegates;
 @property (readonly) NSDictionary *options;
 
@@ -135,6 +136,7 @@
 @property NSNumber *rssi;
 
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
+@property (weak) CBEPeripheralConnection *connection;
 
 @property (readonly) CBECentralManagerOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;

@@ -125,6 +125,7 @@
 
 @implementation CBEPeripheralConnection
 
+@dynamic parent;
 @dynamic delegates;
 
 - (instancetype)initWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
@@ -157,7 +158,9 @@
 #pragma mark - CBEPeripheralConnectionDelegate
 
 - (void)cbePeripheralConnectionDidStart:(CBEPeripheralConnection *)connection {
-    NSLog(@"parent - %@", self.parent.parent);
+    self.parent.connection = self;
+    
+    [self.parent.parent.object connectPeripheral:self.parent.object options:self.options];
 }
 
 @end
