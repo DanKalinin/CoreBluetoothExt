@@ -232,6 +232,12 @@
     [self.disconnection.delegates addObject:self];
 }
 
+#pragma mark - CBEPeripheralDisconnectionDelegate
+
+- (void)cbePeripheralDisconnectionDidFinish:(CBEPeripheralDisconnection *)disconnection {
+    [self finish];
+}
+
 @end
 
 
