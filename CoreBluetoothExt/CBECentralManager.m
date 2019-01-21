@@ -169,7 +169,7 @@
         peripheral.nseOperation.didDisconnect = [CBEPeripheralDidDisconnect.alloc initWithError:error].nseAutorelease;
         [peripheral.nseOperation.delegates cbePeripheralDidDisconnect:peripheral];
     } else {
-        [peripheral.nseOperation.delegates cbePeripheralDidCancelConnection:peripheral];
+        [peripheral.nseOperation.disconnection finish];
     }
     
     [self.peripherals removeObject:peripheral];
