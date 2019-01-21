@@ -123,11 +123,22 @@
 
 @protocol CBEPeripheralDisconnectionDelegate <NSEOperationDelegate>
 
+@optional
+- (void)cbePeripheralDisconnectionDidUpdateState:(CBEPeripheralDisconnection *)disconnection;
+- (void)cbePeripheralDisconnectionDidStart:(CBEPeripheralDisconnection *)disconnection;
+- (void)cbePeripheralDisconnectionDidCancel:(CBEPeripheralDisconnection *)disconnection;
+- (void)cbePeripheralDisconnectionDidFinish:(CBEPeripheralDisconnection *)disconnection;
+
+- (void)cbePeripheralDisconnectionDidUpdateProgress:(CBEPeripheralDisconnection *)disconnection;
+
 @end
 
 
 
 @interface CBEPeripheralDisconnection : NSEOperation <CBEPeripheralDisconnectionDelegate>
+
+@property (readonly) CBEPeripheralOperation *parent;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralDisconnectionDelegate> *delegates;
 
 @end
 
@@ -157,6 +168,7 @@
 
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
 @property (weak) CBEPeripheralConnection *connection;
+@property (weak) CBEPeripheralDisconnection *disconnection;
 
 @property (readonly) CBECentralManagerOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;
@@ -166,7 +178,7 @@
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
-- (CBEPeripheralDisconnection *)cancelConnection;
-- (CBEPeripheralDisconnection *)cancelConnectionWithCompletion:(NSEBlock)completion;
+- (CBEPeripheralDisconnection *)disconnect;
+- (CBEPeripheralDisconnection *)disconnectWithCompletion:(NSEBlock)completion;
 
 @end
