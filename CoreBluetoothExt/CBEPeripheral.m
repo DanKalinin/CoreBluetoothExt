@@ -263,6 +263,22 @@
     return self;
 }
 
+- (CBEPeripheralDisconnection *)disconnect {
+    CBEPeripheralDisconnection *disconnection = CBEPeripheralDisconnection.new;
+    
+    [self addOperation:disconnection];
+    
+    return disconnection;
+}
+
+- (CBEPeripheralDisconnection *)disconnectWithCompletion:(NSEBlock)completion {
+    CBEPeripheralDisconnection *disconnection = self.disconnect;
+    
+    disconnection.completion = completion;
+    
+    return disconnection;
+}
+
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
     [self.parent.peripherals addObject:self.object];
     
@@ -279,22 +295,6 @@
     connection.completion = completion;
     
     return connection;
-}
-
-- (CBEPeripheralDisconnection *)disconnect {
-    CBEPeripheralDisconnection *disconnection = CBEPeripheralDisconnection.new;
-    
-    [self addOperation:disconnection];
-    
-    return disconnection;
-}
-
-- (CBEPeripheralDisconnection *)disconnectWithCompletion:(NSEBlock)completion {
-    CBEPeripheralDisconnection *disconnection = self.disconnect;
-    
-    disconnection.completion = completion;
-    
-    return disconnection;
 }
 
 @end
