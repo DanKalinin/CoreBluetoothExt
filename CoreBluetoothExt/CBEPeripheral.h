@@ -11,6 +11,7 @@
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralDidDisconnect;
 @class CBEPeripheralConnection;
+@class CBEPeripheralDisconnection;
 @class CBEPeripheralOperation;
 @class CBECentralManagerOperation;
 
@@ -120,6 +121,25 @@
 
 
 
+@protocol CBEPeripheralDisconnectionDelegate <NSEOperationDelegate>
+
+@end
+
+
+
+@interface CBEPeripheralDisconnection : NSEOperation <CBEPeripheralDisconnectionDelegate>
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralConnectionDelegate>
 
 @optional
@@ -145,5 +165,8 @@
 
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+
+- (CBEPeripheralDisconnection *)cancelConnection;
+- (CBEPeripheralDisconnection *)cancelConnectionWithCompletion:(NSEBlock)completion;
 
 @end

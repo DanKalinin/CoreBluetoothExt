@@ -182,6 +182,25 @@
 
 
 
+@interface CBEPeripheralDisconnection ()
+
+@end
+
+
+
+@implementation CBEPeripheralDisconnection
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralOperation ()
 
 @end
