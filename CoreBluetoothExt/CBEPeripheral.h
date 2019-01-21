@@ -176,6 +176,8 @@
 
 @property (weak, readonly) CBPeripheral *object;
 
+- (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
+
 - (CBEPeripheralDisconnection *)disconnect;
 - (CBEPeripheralDisconnection *)disconnectWithCompletion:(NSEBlock)completion;
 

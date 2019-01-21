@@ -269,6 +269,18 @@
     return self;
 }
 
+- (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers {
+    NSMutableArray *services = NSMutableArray.array;
+    
+    for (CBService *service in self.object.services) {
+        if ([identifiers containsObject:service.UUID]) {
+            [services addObject:service];
+        }
+    }
+    
+    return services;
+}
+
 - (CBEPeripheralDisconnection *)disconnect {
     CBEPeripheralDisconnection *disconnection = CBEPeripheralDisconnection.new;
     
