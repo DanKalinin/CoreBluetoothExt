@@ -249,6 +249,25 @@
 
 
 
+@interface CBEPeripheralServicesDiscovery ()
+
+@end
+
+
+
+@implementation CBEPeripheralServicesDiscovery
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralOperation ()
 
 @end

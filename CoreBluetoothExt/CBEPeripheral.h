@@ -12,12 +12,14 @@
 @class CBEPeripheralDidDisconnect;
 @class CBEPeripheralDisconnection;
 @class CBEPeripheralConnection;
+@class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralOperation;
 @class CBECentralManagerOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralDisconnectionDelegate;
 @protocol CBEPeripheralConnectionDelegate;
+@protocol CBEPeripheralServicesDiscoveryDelegate;
 
 
 
@@ -153,6 +155,25 @@
 
 
 
+@protocol CBEPeripheralServicesDiscoveryDelegate <NSETimeoutOperationDelegate>
+
+@end
+
+
+
+@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate>
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralConnectionDelegate>
 
 @optional
@@ -183,5 +204,8 @@
 
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralConnection *)connectWithOptions:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end
