@@ -157,13 +157,24 @@
 
 @protocol CBEPeripheralServicesDiscoveryDelegate <NSETimeoutOperationDelegate>
 
+@optional
+- (void)cbePeripheralServicesDiscoveryDidUpdateState:(CBEPeripheralServicesDiscovery *)discovery;
+- (void)cbePeripheralServicesDiscoveryDidStart:(CBEPeripheralServicesDiscovery *)discovery;
+- (void)cbePeripheralServicesDiscoveryDidCancel:(CBEPeripheralServicesDiscovery *)discovery;
+- (void)cbePeripheralServicesDiscoveryDidFinish:(CBEPeripheralServicesDiscovery *)discovery;
+
+- (void)cbePeripheralServicesDiscoveryDidUpdateProgress:(CBEPeripheralServicesDiscovery *)discovery;
+
 @end
 
 
 
-@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate>
+@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate, CBEPeripheralDisconnectionDelegate>
 
+@property (readonly) CBEPeripheralOperation *parent;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralServicesDiscoveryDelegate> *delegates;
 @property (readonly) NSArray<CBUUID *> *services;
+@property (readonly) CBEPeripheralDisconnection *disconnection;
 
 - (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
 
@@ -195,6 +206,7 @@
 @property (weak) CBEPeripheralDidDisconnect *didDisconnect;
 @property (weak) CBEPeripheralConnection *connection;
 @property (weak) CBEPeripheralDisconnection *disconnection;
+@property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 
 @property (readonly) CBECentralManagerOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralDelegate> *delegates;

@@ -8,11 +8,9 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <FoundationExt/FoundationExt.h>
 
-//extern NSErrorDomain const CBEErrorDomain;
-//
-//NS_ERROR_ENUM(CBEErrorDomain) {
-//    CBEErrorUnknown,
-//    CBEErrorTimeout,
-//    CBEErrorMissingServices,
-//    CBEErrorMissingCharacteristics
-//};
+extern NSErrorDomain const CBEErrorDomain;
+
+NS_ERROR_ENUM(CBEErrorDomain) {
+    CBEErrorUnknown,
+    CBEErrorLessAttributes
+};
