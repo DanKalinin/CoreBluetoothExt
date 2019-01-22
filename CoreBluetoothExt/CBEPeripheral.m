@@ -251,11 +251,21 @@
 
 @interface CBEPeripheralServicesDiscovery ()
 
+@property NSArray<CBUUID *> *services;
+
 @end
 
 
 
 @implementation CBEPeripheralServicesDiscovery
+
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
+    
+    self.services = services;
+    
+    return self;
+}
 
 @end
 
@@ -332,6 +342,22 @@
     connection.completion = completion;
     
     return connection;
+}
+
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout {
+    CBEPeripheralServicesDiscovery *discovery = [CBEPeripheralServicesDiscovery.alloc initWithServices:services timeout:timeout];
+    
+    [self addOperation:discovery];
+    
+    return discovery;
+}
+
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralServicesDiscovery *discovery = [self discoverServices:services timeout:timeout];
+    
+    discovery.completion = completion;
+    
+    return discovery;
 }
 
 @end

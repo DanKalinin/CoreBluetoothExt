@@ -163,6 +163,10 @@
 
 @interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate>
 
+@property (readonly) NSArray<CBUUID *> *services;
+
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
+
 @end
 
 
