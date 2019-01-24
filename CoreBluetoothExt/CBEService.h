@@ -6,16 +6,14 @@
 //
 
 #import "CBEAttribute.h"
+#import "CBEPeripheralDisconnection.h"
 
 @class CBEService;
 @class CBEServiceCharacteristicsDiscovery;
 @class CBEServiceOperation;
-@class CBEPeripheralDisconnection;
-@class CBEPeripheralOperation;
 
 @protocol CBEServiceDelegate;
 @protocol CBEServiceCharacteristicsDiscoveryDelegate;
-@protocol CBEPeripheralDisconnectionDelegate;
 
 
 

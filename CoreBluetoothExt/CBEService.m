@@ -6,7 +6,7 @@
 //
 
 #import "CBEService.h"
-#import "CBEPeripheral.h"
+#import "CBECentralManager.h"
 
 
 
