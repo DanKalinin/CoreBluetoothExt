@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeer.h"
+#import "CBEService.h"
 
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;
@@ -189,7 +190,7 @@
 
 
 
-@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralConnectionDelegate>
+@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralDisconnectionDelegate, CBEPeripheralConnectionDelegate, CBEPeripheralServicesDiscoveryDelegate>
 
 @optional
 - (void)cbePeripheralDidDisconnect:(CBPeripheral *)peripheral;

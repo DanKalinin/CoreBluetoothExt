@@ -6,6 +6,7 @@
 //
 
 #import "CBEService.h"
+#import "CBEPeripheral.h"
 
 
 
@@ -57,6 +58,7 @@
 @interface CBEServiceCharacteristicsDiscovery ()
 
 @property NSArray<CBUUID *> *characteristics;
+@property CBEPeripheralDisconnection *disconnection;
 
 @end
 
@@ -64,12 +66,58 @@
 
 @implementation CBEServiceCharacteristicsDiscovery
 
+@dynamic parent;
+@dynamic delegates;
+
 - (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics timeout:(NSTimeInterval)timeout {
     self = [super initWithTimeout:timeout];
     
     self.characteristics = characteristics;
     
     return self;
+}
+
+- (void)updateState:(NSEOperationState)state {
+    [super updateState:state];
+    
+    [self.delegates cbeServiceCharacteristicsDiscoveryDidUpdateState:self];
+    if (state == NSEOperationStateDidStart) {
+        [self.delegates cbeServiceCharacteristicsDiscoveryDidStart:self];
+    } else if (state == NSEOperationStateDidCancel) {
+        [self.delegates cbeServiceCharacteristicsDiscoveryDidCancel:self];
+    } else if (state == NSEOperationStateDidFinish) {
+        [self.delegates cbeServiceCharacteristicsDiscoveryDidFinish:self];
+    }
+}
+
+- (void)updateProgress:(int64_t)completedUnitCount {
+    [super updateProgress:completedUnitCount];
+    
+    [self.delegates cbeServiceCharacteristicsDiscoveryDidUpdateProgress:self];
+}
+
+#pragma mark - CBEServiceCharacteristicsDiscoveryDelegate
+
+- (void)cbeServiceCharacteristicsDiscoveryDidStart:(CBEServiceCharacteristicsDiscovery *)discovery {
+    NSArray *characteristics = [self.parent retrieveCharacteristicsWithIdentifiers:self.characteristics];
+    if (characteristics.count < self.characteristics.count) {
+        self.parent.characteristicsDiscovery = self;
+        
+        [self.parent.parent.object discoverCharacteristics:self.characteristics forService:self.parent.object];
+    } else {
+        [self finish];
+    }
+}
+
+- (void)cbeServiceCharacteristicsDiscoveryDidCancel:(CBEServiceCharacteristicsDiscovery *)discovery {
+    self.disconnection = self.parent.parent.disconnect;
+    [self.disconnection.delegates addObject:self];
+}
+
+#pragma mark - CBEPeripheralDisconnectionDelegate
+
+- (void)cbePeripheralDisconnectionDidFinish:(CBEPeripheralDisconnection *)disconnection {
+    [self finish];
 }
 
 @end
@@ -91,6 +139,8 @@
 
 @implementation CBEServiceOperation
 
+@dynamic parent;
+@dynamic delegates;
 @dynamic object;
 
 - (NSArray<CBCharacteristic *> *)retrieveCharacteristicsWithIdentifiers:(NSArray<CBUUID *> *)identifiers {
