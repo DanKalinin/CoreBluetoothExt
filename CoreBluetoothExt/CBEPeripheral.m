@@ -293,6 +293,8 @@
     NSMutableArray *services = NSMutableArray.array;
     
     for (CBService *service in self.object.services) {
+        [service.nseOperation.delegates addObject:self.delegates];
+        
         if ([identifiers containsObject:service.UUID]) {
             [services addObject:service];
         }
@@ -364,6 +366,21 @@
             [self.servicesDiscovery cancel];
         } else {
             [self.servicesDiscovery finish];
+        }
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    if (error) {
+        service.nseOperation.characteristicsDiscovery.error = error;
+        [service.nseOperation.characteristicsDiscovery finish];
+    } else {
+        NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:service.nseOperation.characteristicsDiscovery.characteristics];
+        if (characteristics.count < service.nseOperation.characteristicsDiscovery.characteristics.count) {
+            service.nseOperation.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
+            [service.nseOperation.characteristicsDiscovery cancel];
+        } else {
+            [service.nseOperation.characteristicsDiscovery finish];
         }
     }
 }
