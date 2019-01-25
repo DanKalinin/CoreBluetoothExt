@@ -7,6 +7,7 @@
 
 #import "CBEAttribute.h"
 #import "CBEPeripheralDisconnection.h"
+#import "CBECharacteristic.h"
 
 @class CBEService;
 @class CBEServiceCharacteristicsDiscovery;

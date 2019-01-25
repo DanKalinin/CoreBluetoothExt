@@ -385,4 +385,13 @@
     }
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if (error) {
+        characteristic.nseOperation.valueReading.error = error;
+        [characteristic.nseOperation.valueReading cancel];
+    } else {
+        [characteristic.nseOperation.valueReading finish];
+    }
+}
+
 @end

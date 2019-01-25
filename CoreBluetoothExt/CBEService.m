@@ -6,7 +6,7 @@
 //
 
 #import "CBEService.h"
-#import "CBECentralManager.h"
+#import "CBEPeripheral.h"
 
 
 
@@ -147,6 +147,8 @@
     NSMutableArray *characteristics = NSMutableArray.array;
     
     for (CBCharacteristic *characteristic in self.object.characteristics) {
+        [characteristic.nseOperation.delegates addObject:self.delegates];
+        
         if ([identifiers containsObject:characteristic.UUID]) {
             [characteristics addObject:characteristic];
         }
