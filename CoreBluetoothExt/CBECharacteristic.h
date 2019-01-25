@@ -98,4 +98,7 @@
 
 @property (weak, readonly) CBCharacteristic *object;
 
+- (CBECharacteristicValueReading *)readValueWithTimeout:(NSTimeInterval)timeout;
+- (CBECharacteristicValueReading *)readValueWithTimeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+
 @end
