@@ -71,7 +71,7 @@
 
 
 
-@protocol CBEPeripheralServicesDiscoveryDelegate <NSEOperationDelegate>
+@protocol CBEPeripheralServicesDiscoveryDelegate <NSETimeoutOperationDelegate>
 
 @optional
 - (void)cbePeripheralServicesDiscoveryDidUpdateState:(CBEPeripheralServicesDiscovery *)discovery;
@@ -85,13 +85,13 @@
 
 
 
-@interface CBEPeripheralServicesDiscovery : NSEOperation <CBEPeripheralServicesDiscoveryDelegate>
+@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralServicesDiscoveryDelegate> *delegates;
 @property (readonly) NSArray<CBUUID *> *services;
 
-- (instancetype)initWithServices:(NSArray<CBUUID *> *)services;
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
 
 @end
 
@@ -104,7 +104,7 @@
 
 
 
-@protocol CBEPeripheralCharacteristicsDiscoveryDelegate <NSEOperationDelegate>
+@protocol CBEPeripheralCharacteristicsDiscoveryDelegate <NSETimeoutOperationDelegate>
 
 @optional
 - (void)cbePeripheralCharacteristicsDiscoveryDidUpdateState:(CBEPeripheralCharacteristicsDiscovery *)discovery;
@@ -118,14 +118,14 @@
 
 
 
-@interface CBEPeripheralCharacteristicsDiscovery : NSEOperation <CBEPeripheralCharacteristicsDiscoveryDelegate>
+@interface CBEPeripheralCharacteristicsDiscovery : NSETimeoutOperation <CBEPeripheralCharacteristicsDiscoveryDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicsDiscoveryDelegate> *delegates;
 @property (readonly) NSArray<CBUUID *> *characteristics;
 @property (readonly) CBService *service;
 
-- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service;
+- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service timeout:(NSTimeInterval)timeout;
 
 @end
 
@@ -138,19 +138,19 @@
 
 
 
-@protocol CBEPeripheralCharacteristicValueReadingDelegate <NSEOperationDelegate>
+@protocol CBEPeripheralCharacteristicValueReadingDelegate <NSETimeoutOperationDelegate>
 
 @end
 
 
 
-@interface CBEPeripheralCharacteristicValueReading : NSEOperation <CBEPeripheralCharacteristicValueReadingDelegate>
+@interface CBEPeripheralCharacteristicValueReading : NSETimeoutOperation <CBEPeripheralCharacteristicValueReadingDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicValueReadingDelegate> *delegates;
 @property (readonly) CBCharacteristic *characteristic;
 
-- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic;
+- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
 
 @end
 
@@ -180,10 +180,10 @@
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
 
-- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services;
-- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services completion:(NSEBlock)completion;
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
-- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service;
-- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service completion:(NSEBlock)completion;
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end

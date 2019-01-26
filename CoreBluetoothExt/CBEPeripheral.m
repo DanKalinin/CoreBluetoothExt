@@ -100,8 +100,8 @@
 @dynamic parent;
 @dynamic delegates;
 
-- (instancetype)initWithServices:(NSArray<CBUUID *> *)services {
-    self = super.init;
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
     
     self.services = services;
     
@@ -167,8 +167,8 @@
 @dynamic parent;
 @dynamic delegates;
 
-- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service {
-    self = super.init;
+- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
     
     self.characteristics = characteristics;
     self.service = service;
@@ -231,8 +231,8 @@
 
 @implementation CBEPeripheralCharacteristicValueReading
 
-- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic {
-    self = super.init;
+- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
     
     self.characteristic = characteristic;
     
@@ -284,32 +284,32 @@
     return services;
 }
 
-- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services {
-    self.servicesDiscovery = [CBEPeripheralServicesDiscovery.alloc initWithServices:services].nseAutorelease;
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout {
+    self.servicesDiscovery = [CBEPeripheralServicesDiscovery.alloc initWithServices:services timeout:timeout].nseAutorelease;
     
     [self addOperation:self.servicesDiscovery];
     
     return self.servicesDiscovery;
 }
 
-- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services completion:(NSEBlock)completion {
-    CBEPeripheralServicesDiscovery *discovery = [self discoverServices:services];
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralServicesDiscovery *discovery = [self discoverServices:services timeout:timeout];
     
     discovery.completion = completion;
     
     return discovery;
 }
 
-- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service {
-    self.characteristicsDiscovery = [CBEPeripheralCharacteristicsDiscovery.alloc initWithCharacteristics:characteristics service:service].nseAutorelease;
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout {
+    self.characteristicsDiscovery = [CBEPeripheralCharacteristicsDiscovery.alloc initWithCharacteristics:characteristics service:service timeout:timeout].nseAutorelease;
     
     [self addOperation:self.characteristicsDiscovery];
     
     return self.characteristicsDiscovery;
 }
 
-- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service completion:(NSEBlock)completion {
-    CBEPeripheralCharacteristicsDiscovery *discovery = [self discoverCharacteristics:characteristics forService:service];
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralCharacteristicsDiscovery *discovery = [self discoverCharacteristics:characteristics forService:service timeout:timeout];
     
     discovery.completion = completion;
     
