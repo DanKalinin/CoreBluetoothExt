@@ -343,6 +343,10 @@
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     [self.connection finish];
+    
+    [self.peripherals addObject:peripheral];
+    
+    [peripheral.nseOperation.delegates addObject:self.delegates];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -357,6 +361,8 @@
     } else {
         [self.disconnection finish];
     }
+    
+    [self.peripherals removeObject:peripheral];
 }
 
 @end
