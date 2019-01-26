@@ -10,12 +10,12 @@
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralServicesDiscovery;
-@class CBEPeripheralCharacteristiscDiscovery;
+@class CBEPeripheralCharacteristicsDiscovery;
 @class CBEPeripheralOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralServicesDiscoveryDelegate;
-@protocol CBEPeripheralCharacteristiscDiscoveryDelegate;
+@protocol CBEPeripheralCharacteristicsDiscoveryDelegate;
 
 
 
@@ -103,16 +103,24 @@
 
 
 
-@protocol CBEPeripheralCharacteristiscDiscoveryDelegate <NSEOperationDelegate>
+@protocol CBEPeripheralCharacteristicsDiscoveryDelegate <NSEOperationDelegate>
+
+@optional
+- (void)cbePeripheralCharacteristicsDiscoveryDidUpdateState:(CBEPeripheralCharacteristicsDiscovery *)discovery;
+- (void)cbePeripheralCharacteristicsDiscoveryDidStart:(CBEPeripheralCharacteristicsDiscovery *)discovery;
+- (void)cbePeripheralCharacteristicsDiscoveryDidCancel:(CBEPeripheralCharacteristicsDiscovery *)discovery;
+- (void)cbePeripheralCharacteristicsDiscoveryDidFinish:(CBEPeripheralCharacteristicsDiscovery *)discovery;
+
+- (void)cbePeripheralCharacteristicsDiscoveryDidUpdateProgress:(CBEPeripheralCharacteristicsDiscovery *)discovery;
 
 @end
 
 
 
-@interface CBEPeripheralCharacteristiscDiscovery : NSEOperation <CBEPeripheralCharacteristiscDiscoveryDelegate>
+@interface CBEPeripheralCharacteristicsDiscovery : NSEOperation <CBEPeripheralCharacteristicsDiscoveryDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristiscDiscoveryDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicsDiscoveryDelegate> *delegates;
 @property (readonly) NSArray<CBUUID *> *characteristics;
 @property (readonly) CBService *service;
 
