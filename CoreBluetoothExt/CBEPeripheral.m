@@ -191,6 +191,12 @@
     [self.delegates cbePeripheralCharacteristicsDiscoveryDidUpdateProgress:self];
 }
 
+#pragma mark - CBEPeripheralCharacteristicsDiscoveryDelegate
+
+- (void)cbePeripheralCharacteristicsDiscoveryDidStart:(CBEPeripheralCharacteristicsDiscovery *)discovery {
+    
+}
+
 @end
 
 
@@ -205,6 +211,7 @@
 @interface CBEPeripheralOperation ()
 
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
+@property (weak) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 
 @end
 
@@ -251,6 +258,22 @@
     return discovery;
 }
 
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service {
+    self.characteristicsDiscovery = [CBEPeripheralCharacteristicsDiscovery.alloc initWithCharacteristics:characteristics service:service].nseAutorelease;
+    
+    [self addOperation:self.characteristicsDiscovery];
+    
+    return self.characteristicsDiscovery;
+}
+
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service completion:(NSEBlock)completion {
+    CBEPeripheralCharacteristicsDiscovery *discovery = [self discoverCharacteristics:characteristics forService:service];
+    
+    discovery.completion = completion;
+    
+    return discovery;
+}
+
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -268,8 +291,19 @@
     }
 }
 
-- (void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error {
-    
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    if (error) {
+        self.characteristicsDiscovery.error = error;
+        [self.characteristicsDiscovery finish];
+    } else {
+//        NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:service.nseOperation.characteristicsDiscovery.characteristics];
+//        if (characteristics.count < service.nseOperation.characteristicsDiscovery.characteristics.count) {
+//            service.nseOperation.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
+//            [service.nseOperation.characteristicsDiscovery cancel];
+//        } else {
+//            [service.nseOperation.characteristicsDiscovery finish];
+//        }
+    }
 }
 
 @end

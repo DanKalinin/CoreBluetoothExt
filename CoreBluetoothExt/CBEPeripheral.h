@@ -150,10 +150,14 @@
 
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
+@property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
 
 - (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services;
 - (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services completion:(NSEBlock)completion;
+
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service;
+- (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service completion:(NSEBlock)completion;
 
 @end
