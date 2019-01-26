@@ -12,11 +12,13 @@
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralCharacteristicsDiscovery;
+@class CBEPeripheralCharacteristicValueReading;
 @class CBEPeripheralOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralServicesDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicsDiscoveryDelegate;
+@protocol CBEPeripheralCharacteristicValueReadingDelegate;
 
 
 
@@ -140,6 +142,14 @@
 
 @protocol CBEPeripheralCharacteristicValueReadingDelegate <NSETimeoutOperationDelegate>
 
+@optional
+- (void)cbePeripheralCharacteristicValueReadingDidUpdateState:(CBEPeripheralCharacteristicValueReading *)reading;
+- (void)cbePeripheralCharacteristicValueReadingDidStart:(CBEPeripheralCharacteristicValueReading *)reading;
+- (void)cbePeripheralCharacteristicValueReadingDidCancel:(CBEPeripheralCharacteristicValueReading *)reading;
+- (void)cbePeripheralCharacteristicValueReadingDidFinish:(CBEPeripheralCharacteristicValueReading *)reading;
+
+- (void)cbePeripheralCharacteristicValueReadingDidUpdateProgress:(CBEPeripheralCharacteristicValueReading *)reading;
+
 @end
 
 
@@ -177,6 +187,7 @@
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
+@property (weak, readonly) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
 
@@ -185,5 +196,8 @@
 
 - (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+
+- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end
