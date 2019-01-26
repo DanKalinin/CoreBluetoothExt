@@ -10,6 +10,7 @@
 
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
+@class CBECentralManagerDidDisconnectPeripheral;
 @class CBECentralManagerPeripheralDisconnection;
 @class CBECentralManagerPeripheralConnection;
 @class CBECentralManagerOperation;
@@ -62,6 +63,24 @@
 @property (readonly) NSNumber *rssi;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEPeripheralAdvertisement *)advertisement rssi:(NSNumber *)rssi;
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBECentralManagerDidDisconnectPeripheral : NSEObject
+
+@property (readonly) CBPeripheral *peripheral;
+@property (readonly) NSError *error;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral error:(NSError *)error;
 
 @end
 
@@ -142,11 +161,12 @@
 
 
 
-@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate>
+@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBECentralManagerPeripheralDisconnectionDelegate, CBECentralManagerPeripheralConnectionDelegate, CBEPeripheralDelegate>
 
 @optional
 - (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;
 - (void)cbeCentralManagerDidDiscoverPeripheral:(CBCentralManager *)central;
+- (void)cbeCentralManagerDidDisconnectPeripheral:(CBCentralManager *)central;
 
 @end
 
@@ -159,6 +179,7 @@
 
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
+@property (weak, readonly) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
 @property (weak, readonly) CBECentralManagerPeripheralDisconnection *disconnection;
 @property (weak, readonly) CBECentralManagerPeripheralConnection *connection;
 

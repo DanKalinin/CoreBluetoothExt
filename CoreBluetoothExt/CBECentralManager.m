@@ -87,6 +87,37 @@
 
 
 
+@interface CBECentralManagerDidDisconnectPeripheral ()
+
+@property CBPeripheral *peripheral;
+@property NSError *error;
+
+@end
+
+
+
+@implementation CBECentralManagerDidDisconnectPeripheral
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    self = super.init;
+    
+    self.peripheral = peripheral;
+    self.error = error;
+    
+    return self;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBECentralManagerPeripheralDisconnection ()
 
 @property CBPeripheral *peripheral;
@@ -234,6 +265,7 @@
 @property NSMutableSet<CBPeripheral *> *peripherals;
 
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
+@property (weak) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
 @property (weak) CBECentralManagerPeripheralDisconnection *disconnection;
 @property (weak) CBECentralManagerPeripheralConnection *connection;
 
@@ -320,9 +352,10 @@
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     if (error) {
-        
+        self.didDisconnectPeripheral = [CBECentralManagerDidDisconnectPeripheral.alloc initWithPeripheral:peripheral error:error].nseAutorelease;
+        [self.delegates cbeCentralManagerDidDisconnectPeripheral:central];
     } else {
-        
+        [self.disconnection finish];
     }
 }
 
