@@ -138,6 +138,31 @@
 
 
 
+@protocol CBEPeripheralCharacteristicValueReadingDelegate <NSEOperationDelegate>
+
+@end
+
+
+
+@interface CBEPeripheralCharacteristicValueReading : NSEOperation <CBEPeripheralCharacteristicValueReadingDelegate>
+
+@property (readonly) CBEPeripheralOperation *parent;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicValueReadingDelegate> *delegates;
+@property (readonly) CBCharacteristic *characteristic;
+
+- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralServicesDiscoveryDelegate>
 
 @end

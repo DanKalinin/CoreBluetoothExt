@@ -138,6 +138,10 @@
     }
 }
 
+- (void)cbePeripheralServicesDiscoveryDidCancel:(CBEPeripheralServicesDiscovery *)discovery {
+    [self finish];
+}
+
 @end
 
 
@@ -200,6 +204,39 @@
     } else {
         [self finish];
     }
+}
+
+- (void)cbePeripheralCharacteristicsDiscoveryDidCancel:(CBEPeripheralCharacteristicsDiscovery *)discovery {
+    [self finish];
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBEPeripheralCharacteristicValueReading ()
+
+@property CBCharacteristic *characteristic;
+
+@end
+
+
+
+@implementation CBEPeripheralCharacteristicValueReading
+
+- (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic {
+    self = super.init;
+    
+    self.characteristic = characteristic;
+    
+    return self;
 }
 
 @end
@@ -299,7 +336,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     if (error) {
         self.characteristicsDiscovery.error = error;
-        [self.characteristicsDiscovery finish];
+        [self.characteristicsDiscovery cancel];
     } else {
         NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristicsDiscovery.characteristics];
         if (characteristics.count < self.characteristicsDiscovery.characteristics.count) {
