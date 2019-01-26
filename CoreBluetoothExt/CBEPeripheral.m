@@ -282,11 +282,73 @@
 
 
 
+@interface CBEPeripheralL2CAPChannelOpening ()
+
+@property CBL2CAPPSM psm;
+
+@end
+
+
+
+@implementation CBEPeripheralL2CAPChannelOpening
+
+@dynamic parent;
+@dynamic delegates;
+
+- (instancetype)initWithPSM:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
+    
+    self.psm = psm;
+    
+    return self;
+}
+
+- (void)updateState:(NSEOperationState)state {
+    [super updateState:state];
+    
+    [self.delegates cbePeripheralL2CAPChannelOpeningDidUpdateState:self];
+    if (state == NSEOperationStateDidStart) {
+        [self.delegates cbePeripheralL2CAPChannelOpeningDidStart:self];
+    } else if (state == NSEOperationStateDidCancel) {
+        [self.delegates cbePeripheralL2CAPChannelOpeningDidCancel:self];
+    } else if (state == NSEOperationStateDidFinish) {
+        [self.delegates cbePeripheralL2CAPChannelOpeningDidFinish:self];
+    }
+}
+
+- (void)updateProgress:(int64_t)completedUnitCount {
+    [super updateProgress:completedUnitCount];
+    
+    [self.delegates cbePeripheralL2CAPChannelOpeningDidUpdateProgress:self];
+}
+
+#pragma mark - CBEPeripheralL2CAPChannelOpeningDelegate
+
+- (void)cbePeripheralL2CAPChannelOpeningDidStart:(CBEPeripheralL2CAPChannelOpening *)opening {
+    [self.parent.object openL2CAPChannel:self.psm];
+}
+
+- (void)cbePeripheralL2CAPChannelOpeningDidCancel:(CBEPeripheralL2CAPChannelOpening *)opening {
+    [self finish];
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralOperation ()
 
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 @property (weak) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
+@property (weak) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 @end
 
@@ -365,6 +427,22 @@
     return reading;
 }
 
+- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout {
+    self.l2capChannelOpening = [CBEPeripheralL2CAPChannelOpening.alloc initWithPSM:psm timeout:timeout].nseAutorelease;
+    
+    [self addOperation:self.l2capChannelOpening];
+    
+    return self.l2capChannelOpening;
+}
+
+- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralL2CAPChannelOpening *opening = [self openL2CAPChannel:psm timeout:timeout];
+    
+    opening.completion = completion;
+    
+    return opening;
+}
+
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -403,6 +481,15 @@
         [self.characteristicValueReading cancel];
     } else {
         [self.characteristicValueReading finish];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error {
+    if (error) {
+        self.l2capChannelOpening.error = error;
+        [self.l2capChannelOpening cancel];
+    } else {
+        [self.l2capChannelOpening finish];
     }
 }
 

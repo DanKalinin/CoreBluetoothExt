@@ -13,12 +13,14 @@
 @class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralCharacteristicsDiscovery;
 @class CBEPeripheralCharacteristicValueReading;
+@class CBEPeripheralL2CAPChannelOpening;
 @class CBEPeripheralOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralServicesDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicsDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicValueReadingDelegate;
+@protocol CBEPeripheralL2CAPChannelOpeningDelegate;
 
 
 
@@ -173,6 +175,39 @@
 
 
 
+@protocol CBEPeripheralL2CAPChannelOpeningDelegate <NSETimeoutOperationDelegate>
+
+@optional
+- (void)cbePeripheralL2CAPChannelOpeningDidUpdateState:(CBEPeripheralL2CAPChannelOpening *)opening;
+- (void)cbePeripheralL2CAPChannelOpeningDidStart:(CBEPeripheralL2CAPChannelOpening *)opening;
+- (void)cbePeripheralL2CAPChannelOpeningDidCancel:(CBEPeripheralL2CAPChannelOpening *)opening;
+- (void)cbePeripheralL2CAPChannelOpeningDidFinish:(CBEPeripheralL2CAPChannelOpening *)opening;
+
+- (void)cbePeripheralL2CAPChannelOpeningDidUpdateProgress:(CBEPeripheralL2CAPChannelOpening *)opening;
+
+@end
+
+
+
+@interface CBEPeripheralL2CAPChannelOpening : NSETimeoutOperation <CBEPeripheralL2CAPChannelOpeningDelegate>
+
+@property (readonly) CBEPeripheralOperation *parent;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralL2CAPChannelOpeningDelegate> *delegates;
+@property (readonly) CBL2CAPPSM psm;
+
+- (instancetype)initWithPSM:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralServicesDiscoveryDelegate>
 
 @end
@@ -188,6 +223,7 @@
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
+@property (weak, readonly) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
 
@@ -199,5 +235,8 @@
 
 - (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+
+- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end
