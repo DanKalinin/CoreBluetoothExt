@@ -57,7 +57,7 @@
 @interface CBECentralManagerDidDiscoverPeripheral ()
 
 @property CBPeripheral *peripheral;
-@property CBEAdvertisement *advertisement;
+@property CBEPeripheralAdvertisement *advertisement;
 @property NSNumber *rssi;
 
 @end
@@ -66,7 +66,7 @@
 
 @implementation CBECentralManagerDidDiscoverPeripheral
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEAdvertisement *)advertisement rssi:(NSNumber *)rssi {
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEPeripheralAdvertisement *)advertisement rssi:(NSNumber *)rssi {
     self = super.init;
     
     self.peripheral = peripheral;
@@ -87,11 +87,110 @@
 
 
 
+@interface CBECentralManagerPeripheralDisconnection ()
+
+@property CBPeripheral *peripheral;
+
+@end
+
+
+
+@implementation CBECentralManagerPeripheralDisconnection
+
+@dynamic parent;
+@dynamic delegates;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral {
+    self = super.init;
+    
+    self.peripheral = peripheral;
+    
+    return self;
+}
+
+- (void)updateState:(NSEOperationState)state {
+    [super updateState:state];
+    
+    [self.delegates cbeCentralManagerPeripheralDisconnectionDidUpdateState:self];
+    if (state == NSEOperationStateDidStart) {
+        [self.delegates cbeCentralManagerPeripheralDisconnectionDidStart:self];
+    } else if (state == NSEOperationStateDidCancel) {
+        [self.delegates cbeCentralManagerPeripheralDisconnectionDidCancel:self];
+    } else if (state == NSEOperationStateDidFinish) {
+        [self.delegates cbeCentralManagerPeripheralDisconnectionDidFinish:self];
+    }
+}
+
+- (void)updateProgress:(int64_t)completedUnitCount {
+    [super updateProgress:completedUnitCount];
+    
+    [self.delegates cbeCentralManagerPeripheralDisconnectionDidUpdateProgress:self];
+}
+
+#pragma mark - CBECentralManagerPeripheralDisconnectionDelegate
+
+- (void)cbeCentralManagerPeripheralDisconnectionDidStart:(CBECentralManagerPeripheralDisconnection *)disconnection {
+    if (self.peripheral.state == CBPeripheralStateDisconnected) {
+        [self finish];
+    } else {
+        if (self.peripheral.state == CBPeripheralStateDisconnecting) {
+        } else {
+            [self.parent.object cancelPeripheralConnection:self.peripheral];
+        }
+    }
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBECentralManagerPeripheralConnection ()
+
+@property CBPeripheral *peripheral;
+@property NSDictionary *options;
+
+@end
+
+
+
+@implementation CBECentralManagerPeripheralConnection
+
+@dynamic parent;
+@dynamic delegates;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
+    
+    self.peripheral = peripheral;
+    self.options = options;
+    
+    return self;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBECentralManagerOperation ()
 
 @property NSMutableSet<CBPeripheral *> *peripherals;
 
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
+@property (weak) CBECentralManagerPeripheralDisconnection *disconnection;
 
 @end
 
@@ -112,24 +211,20 @@
     return self;
 }
 
-- (NSArray<CBPeripheral *> *)retrievePeripheralsWithIdentifiers:(NSArray<NSUUID *> *)identifiers {
-    NSArray *peripherals = [self.object retrievePeripheralsWithIdentifiers:identifiers];
+- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral {
+    self.disconnection = [CBECentralManagerPeripheralDisconnection.alloc initWithPeripheral:peripheral].nseAutorelease;
     
-    for (CBPeripheral *peripheral in peripherals) {
-        [peripheral.nseOperation.delegates addObject:self.delegates];
-    }
+    [self addOperation:self.disconnection];
     
-    return peripherals;
+    return self.disconnection;
 }
 
-- (NSArray<CBPeripheral *> *)retrieveConnectedPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs {
-    NSArray *peripherals = [self.object retrieveConnectedPeripheralsWithServices:serviceUUIDs];
+- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion {
+    CBECentralManagerPeripheralDisconnection *disconnection = [self disconnectPeripheral:peripheral];
     
-    for (CBPeripheral *peripheral in peripherals) {
-        [peripheral.nseOperation.delegates addObject:self.delegates];
-    }
+    disconnection.completion = completion;
     
-    return peripherals;
+    return disconnection;
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -144,9 +239,10 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    [peripheral.nseOperation.delegates addObject:self.delegates];
+    CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
     
-    CBEAdvertisement *advertisement = [CBEAdvertisement.alloc initWithDictionary:advertisementData];
+    peripheral.nseOperation.advertisement = advertisement;
+    peripheral.nseOperation.rssi = RSSI;
     
     self.didDiscoverPeripheral = [CBECentralManagerDidDiscoverPeripheral.alloc initWithPeripheral:peripheral advertisement:advertisement rssi:RSSI].nseAutorelease;
     [self.delegates cbeCentralManagerDidDiscoverPeripheral:central];

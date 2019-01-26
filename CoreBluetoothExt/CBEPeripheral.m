@@ -6,7 +6,6 @@
 //
 
 #import "CBEPeripheral.h"
-#import "CBECentralManager.h"
 
 
 
@@ -43,6 +42,37 @@
 
 
 @implementation CBEPeripheral
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBEPeripheralAdvertisement ()
+
+@property NSArray<CBUUID *> *serviceUUIDs;
+@property BOOL isConnectable;
+
+@end
+
+
+
+@implementation CBEPeripheralAdvertisement
+
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super initWithDictionary:dictionary];
+    
+    self.serviceUUIDs = dictionary[CBAdvertisementDataServiceUUIDsKey];
+    self.isConnectable = [dictionary[CBAdvertisementDataIsConnectable] boolValue];
+    
+    return self;
+}
 
 @end
 

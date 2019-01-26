@@ -6,9 +6,9 @@
 //
 
 #import "CBEPeer.h"
-#import "CBEDisconnection.h"
 
 @class CBEPeripheral;
+@class CBEPeripheralAdvertisement;
 @class CBEPeripheralOperation;
 @class CBECentralManagerOperation;
 
@@ -51,6 +51,22 @@
 
 
 
+@interface CBEPeripheralAdvertisement : NSEDictionaryObject
+
+@property (readonly) NSArray<CBUUID *> *serviceUUIDs;
+@property (readonly) BOOL isConnectable;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate>
 
 @end
@@ -59,9 +75,11 @@
 
 @interface CBEPeripheralOperation : CBEPeerOperation
 
+@property CBEPeripheralAdvertisement *advertisement;
+@property NSNumber *rssi;
+
 @property (readonly) CBECentralManagerOperation *parent;
 
 @property (weak, readonly) CBPeripheral *object;
-@property (weak, readonly) CBEDisconnection *disconnection;
 
 @end
