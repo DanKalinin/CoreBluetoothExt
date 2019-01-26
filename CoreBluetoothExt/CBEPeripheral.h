@@ -67,6 +67,19 @@
 
 
 
+@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBEPeripheralDelegate <CBEPeerDelegate>
 
 @end

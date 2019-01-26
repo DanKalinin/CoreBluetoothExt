@@ -161,7 +161,7 @@
 
 
 
-@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBECentralManagerPeripheralDisconnectionDelegate, CBECentralManagerPeripheralConnectionDelegate, CBEPeripheralDelegate>
+@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate, CBECentralManagerPeripheralDisconnectionDelegate, CBECentralManagerPeripheralConnectionDelegate>
 
 @optional
 - (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;
