@@ -7,6 +7,8 @@
 
 #import "CBEMain.h"
 
+@class CBEAdvertisement;
+
 
 
 @interface CBEAdvertisement : NSEDictionaryObject
