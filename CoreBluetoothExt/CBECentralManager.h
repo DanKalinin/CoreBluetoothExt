@@ -7,16 +7,15 @@
 
 #import "CBEManager.h"
 #import "CBEPeripheral.h"
+#import "CBECentralManagerPeripheralDisconnection.h"
 
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
 @class CBECentralManagerDidDisconnectPeripheral;
-@class CBECentralManagerPeripheralDisconnection;
 @class CBECentralManagerPeripheralConnection;
 @class CBECentralManagerOperation;
 
 @protocol CBECentralManagerDelegate;
-@protocol CBECentralManagerPeripheralDisconnectionDelegate;
 @protocol CBECentralManagerPeripheralConnectionDelegate;
 
 
@@ -81,39 +80,6 @@
 @property (readonly) NSError *error;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral error:(NSError *)error;
-
-@end
-
-
-
-
-
-
-
-
-
-
-@protocol CBECentralManagerPeripheralDisconnectionDelegate <NSEOperationDelegate>
-
-@optional
-- (void)cbeCentralManagerPeripheralDisconnectionDidUpdateState:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidStart:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidCancel:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidFinish:(CBECentralManagerPeripheralDisconnection *)disconnection;
-
-- (void)cbeCentralManagerPeripheralDisconnectionDidUpdateProgress:(CBECentralManagerPeripheralDisconnection *)disconnection;
-
-@end
-
-
-
-@interface CBECentralManagerPeripheralDisconnection : NSEOperation <CBECentralManagerPeripheralDisconnectionDelegate>
-
-@property (readonly) CBECentralManagerOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBECentralManagerPeripheralDisconnectionDelegate> *delegates;
-@property (readonly) CBPeripheral *peripheral;
-
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 
 @end
 
