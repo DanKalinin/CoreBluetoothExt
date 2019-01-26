@@ -10,6 +10,7 @@
 
 @class CBEPeripheral;
 @class CBEPeripheralOperation;
+@class CBECentralManagerOperation;
 
 @protocol CBEPeripheralDelegate;
 
@@ -57,6 +58,8 @@
 
 
 @interface CBEPeripheralOperation : CBEPeerOperation
+
+@property (readonly) CBECentralManagerOperation *parent;
 
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEDisconnection *disconnection;

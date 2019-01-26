@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeripheral.h"
+#import "CBECentralManager.h"
 
 
 
@@ -62,6 +63,7 @@
 
 @implementation CBEPeripheralOperation
 
+@dynamic parent;
 @dynamic object;
 
 @end

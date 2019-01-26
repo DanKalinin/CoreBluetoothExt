@@ -6,7 +6,7 @@
 //
 
 #import "CBEDisconnection.h"
-#import "CBEPeripheral.h"
+#import "CBECentralManager.h"
 
 
 
@@ -46,7 +46,10 @@
     if (self.parent.object.state == CBPeripheralStateDisconnected) {
         [self finish];
     } else {
-        
+        if (self.parent.object.state == CBPeripheralStateDisconnecting) {
+        } else {
+            [self.parent.parent.object cancelPeripheralConnection:self.parent.object];
+        }
     }
 }
 

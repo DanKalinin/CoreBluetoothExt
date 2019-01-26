@@ -7,6 +7,7 @@
 
 #import "CBEManager.h"
 #import "CBEAdvertisement.h"
+#import "CBEPeripheral.h"
 
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
