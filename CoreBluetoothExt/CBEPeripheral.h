@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeer.h"
+#import "CBEService.h"
 
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;

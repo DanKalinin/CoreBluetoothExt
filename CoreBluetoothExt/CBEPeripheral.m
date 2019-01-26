@@ -194,7 +194,12 @@
 #pragma mark - CBEPeripheralCharacteristicsDiscoveryDelegate
 
 - (void)cbePeripheralCharacteristicsDiscoveryDidStart:(CBEPeripheralCharacteristicsDiscovery *)discovery {
-    
+    NSArray *characteristics = [self.service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristics];
+    if (characteristics.count < self.characteristics.count) {
+        [self.parent.object discoverCharacteristics:self.characteristics forService:self.service];
+    } else {
+        [self finish];
+    }
 }
 
 @end
@@ -296,13 +301,13 @@
         self.characteristicsDiscovery.error = error;
         [self.characteristicsDiscovery finish];
     } else {
-//        NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:service.nseOperation.characteristicsDiscovery.characteristics];
-//        if (characteristics.count < service.nseOperation.characteristicsDiscovery.characteristics.count) {
-//            service.nseOperation.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
-//            [service.nseOperation.characteristicsDiscovery cancel];
-//        } else {
-//            [service.nseOperation.characteristicsDiscovery finish];
-//        }
+        NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristicsDiscovery.characteristics];
+        if (characteristics.count < self.characteristicsDiscovery.characteristics.count) {
+            self.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
+            [self.characteristicsDiscovery cancel];
+        } else {
+            [self.characteristicsDiscovery finish];
+        }
     }
 }
 
