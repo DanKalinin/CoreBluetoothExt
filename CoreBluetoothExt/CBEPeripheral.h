@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeer.h"
+#import "CBEDisconnection.h"
 
 @class CBEPeripheral;
 @class CBEPeripheralOperation;
@@ -58,5 +59,6 @@
 @interface CBEPeripheralOperation : CBEPeerOperation
 
 @property (weak, readonly) CBPeripheral *object;
+@property (weak, readonly) CBEDisconnection *disconnection;
 
 @end
