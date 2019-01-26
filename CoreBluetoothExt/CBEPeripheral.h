@@ -6,15 +6,16 @@
 //
 
 #import "CBEPeer.h"
-#import "CBECentralManagerPeripheralDisconnection.h"
 
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralServicesDiscovery;
+@class CBEPeripheralCharacteristiscDiscovery;
 @class CBEPeripheralOperation;
-@class CBECentralManagerOperation;
 
 @protocol CBEPeripheralDelegate;
+@protocol CBEPeripheralServicesDiscoveryDelegate;
+@protocol CBEPeripheralCharacteristiscDiscoveryDelegate;
 
 
 
@@ -69,7 +70,7 @@
 
 
 
-@protocol CBEPeripheralServicesDiscoveryDelegate <NSETimeoutOperationDelegate>
+@protocol CBEPeripheralServicesDiscoveryDelegate <NSEOperationDelegate>
 
 @optional
 - (void)cbePeripheralServicesDiscoveryDidUpdateState:(CBEPeripheralServicesDiscovery *)discovery;
@@ -83,13 +84,35 @@
 
 
 
-@interface CBEPeripheralServicesDiscovery : NSETimeoutOperation <CBEPeripheralServicesDiscoveryDelegate, CBECentralManagerPeripheralDisconnectionDelegate>
+@interface CBEPeripheralServicesDiscovery : NSEOperation <CBEPeripheralServicesDiscoveryDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralServicesDiscoveryDelegate> *delegates;
 @property (readonly) NSArray<CBUUID *> *services;
 
-- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout;
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services;
+
+@end
+
+
+
+
+
+
+
+
+
+
+@protocol CBEPeripheralCharacteristiscDiscoveryDelegate <NSETimeoutOperationDelegate>
+
+@end
+
+
+
+@interface CBEPeripheralCharacteristiscDiscovery : NSETimeoutOperation <CBEPeripheralCharacteristiscDiscoveryDelegate>
+
+@property (readonly) CBEPeripheralOperation *parent;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristiscDiscoveryDelegate> *delegates;
 
 @end
 
@@ -113,10 +136,12 @@
 @property CBEPeripheralAdvertisement *advertisement;
 @property NSNumber *rssi;
 
-@property (readonly) CBECentralManagerOperation *parent;
-
 @property (weak, readonly) CBPeripheral *object;
+@property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
+
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services;
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services completion:(NSEBlock)completion;
 
 @end

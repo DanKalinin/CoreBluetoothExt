@@ -6,6 +6,7 @@
 //
 
 #import "CBEPeripheral.h"
+#import "CBECentralManager.h"
 
 
 
@@ -88,6 +89,7 @@
 @interface CBEPeripheralServicesDiscovery ()
 
 @property NSArray<CBUUID *> *services;
+@property CBECentralManagerPeripheralDisconnection *disconnection;
 
 @end
 
@@ -98,8 +100,8 @@
 @dynamic parent;
 @dynamic delegates;
 
-- (instancetype)initWithServices:(NSArray<CBUUID *> *)services timeout:(NSTimeInterval)timeout {
-    self = [super initWithTimeout:timeout];
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services {
+    self = super.init;
     
     self.services = services;
     
@@ -128,17 +130,12 @@
 #pragma mark - CBEPeripheralServicesDiscoveryDelegate
 
 - (void)cbePeripheralServicesDiscoveryDidStart:(CBEPeripheralServicesDiscovery *)discovery {
-    
-}
-
-- (void)cbePeripheralServicesDiscoveryDidCancel:(CBEPeripheralServicesDiscovery *)discovery {
-    
-}
-
-#pragma mark - CBECentralManagerPeripheralDisconnectionDelegate
-
-- (void)cbeCentralManagerPeripheralDisconnectionDidFinish:(CBECentralManagerPeripheralDisconnection *)disconnection {
-    
+    NSArray *services = [self.parent retrieveServicesWithIdentifiers:self.services];
+    if (services.count < self.services.count) {
+        [self.parent.object discoverServices:self.services];
+    } else {
+        [self finish];
+    }
 }
 
 @end
@@ -153,6 +150,8 @@
 
 
 @interface CBEPeripheralOperation ()
+
+@property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 
 @end
 
@@ -183,9 +182,40 @@
     return services;
 }
 
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services {
+    self.servicesDiscovery = [CBEPeripheralServicesDiscovery.alloc initWithServices:services].nseAutorelease;
+    
+    [self addOperation:self.servicesDiscovery];
+    
+    return self.servicesDiscovery;
+}
+
+- (CBEPeripheralServicesDiscovery *)discoverServices:(NSArray<CBUUID *> *)services completion:(NSEBlock)completion {
+    CBEPeripheralServicesDiscovery *discovery = [self discoverServices:services];
+    
+    discovery.completion = completion;
+    
+    return discovery;
+}
+
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
+    if (error) {
+        self.servicesDiscovery.error = error;
+        [self.servicesDiscovery cancel];
+    } else {
+        NSArray *services = [self retrieveServicesWithIdentifiers:self.servicesDiscovery.services];
+        if (services.count < self.servicesDiscovery.services.count) {
+            self.servicesDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
+            [self.servicesDiscovery cancel];
+        } else {
+            [self.servicesDiscovery finish];
+        }
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error {
     
 }
 
