@@ -103,16 +103,20 @@
 
 
 
-@protocol CBEPeripheralCharacteristiscDiscoveryDelegate <NSETimeoutOperationDelegate>
+@protocol CBEPeripheralCharacteristiscDiscoveryDelegate <NSEOperationDelegate>
 
 @end
 
 
 
-@interface CBEPeripheralCharacteristiscDiscovery : NSETimeoutOperation <CBEPeripheralCharacteristiscDiscoveryDelegate>
+@interface CBEPeripheralCharacteristiscDiscovery : NSEOperation <CBEPeripheralCharacteristiscDiscoveryDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristiscDiscoveryDelegate> *delegates;
+@property (readonly) NSArray<CBUUID *> *characteristics;
+@property (readonly) CBService *service;
+
+- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service;
 
 @end
 

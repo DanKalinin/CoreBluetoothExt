@@ -149,6 +149,40 @@
 
 
 
+@interface CBEPeripheralCharacteristiscDiscovery ()
+
+@property NSArray<CBUUID *> *characteristics;
+@property CBService *service;
+
+@end
+
+
+
+@implementation CBEPeripheralCharacteristiscDiscovery
+
+@dynamic parent;
+@dynamic delegates;
+
+- (instancetype)initWithCharacteristics:(NSArray<CBUUID *> *)characteristics service:(CBService *)service {
+    self = super.init;
+    
+    self.characteristics = characteristics;
+    self.service = service;
+    
+    return self;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBEPeripheralOperation ()
 
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
