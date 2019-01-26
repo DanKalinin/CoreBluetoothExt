@@ -121,12 +121,13 @@
 
 
 
-@interface CBECentralManagerPeripheralConnection : NSETimeoutOperation <CBECentralManagerPeripheralConnectionDelegate>
+@interface CBECentralManagerPeripheralConnection : NSETimeoutOperation <CBECentralManagerPeripheralConnectionDelegate, CBECentralManagerPeripheralDisconnectionDelegate>
 
 @property (readonly) CBECentralManagerOperation *parent;
 @property (readonly) NSMutableOrderedSet<CBECentralManagerPeripheralConnectionDelegate> *delegates;
 @property (readonly) CBPeripheral *peripheral;
 @property (readonly) NSDictionary *options;
+@property (readonly) CBECentralManagerPeripheralDisconnection *disconnection;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
 
@@ -159,8 +160,12 @@
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 @property (weak, readonly) CBECentralManagerPeripheralDisconnection *disconnection;
+@property (weak, readonly) CBECentralManagerPeripheralConnection *connection;
 
 - (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral;
 - (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion;
+
+- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end
