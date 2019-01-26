@@ -1,0 +1,94 @@
+//
+//  CBECentralManager.h
+//  CoreBluetoothExt
+//
+//  Created by Dan Kalinin on 1/26/19.
+//
+
+#import "CBEManager.h"
+#import "CBEAdvertisement.h"
+
+@class CBECentralManager;
+@class CBECentralManagerDidDiscoverPeripheral;
+@class CBECentralManagerOperation;
+
+@protocol CBECentralManagerDelegate;
+
+
+
+
+
+
+
+
+
+
+@interface CBCentralManager (CBE)
+
+@property (readonly) CBECentralManagerOperation *nseOperation;
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBECentralManager : CBCentralManager
+
+@end
+
+
+
+
+
+
+
+
+
+
+@interface CBECentralManagerDidDiscoverPeripheral : NSEObject
+
+@property (readonly) CBPeripheral *peripheral;
+@property (readonly) CBEAdvertisement *advertisement;
+@property (readonly) NSNumber *rssi;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEAdvertisement *)advertisement rssi:(NSNumber *)rssi;
+
+@end
+
+
+
+
+
+
+
+
+
+
+@protocol CBECentralManagerDelegate <CBEManagerDelegate>
+
+@optional
+- (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;
+- (void)cbeCentralManagerDidDiscoverPeripheral:(CBCentralManager *)central;
+
+@end
+
+
+
+@interface CBECentralManagerOperation : CBEManagerOperation <CBECentralManagerDelegate, CBCentralManagerDelegate>
+
+@property (readonly) NSMutableOrderedSet<CBECentralManagerDelegate> *delegates;
+@property (readonly) NSMutableSet<CBPeripheral *> *peripherals;
+
+@property (weak, readonly) CBCentralManager *object;
+@property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
+
+- (NSArray<CBPeripheral *> *)retrievePeripheralsWithIdentifiers:(NSArray<NSUUID *> *)identifiers;
+- (NSArray<CBPeripheral *> *)retrieveConnectedPeripheralsWithServices:(NSArray<CBUUID *> *)serviceUUIDs;
+
+@end
