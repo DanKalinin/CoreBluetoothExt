@@ -363,6 +363,8 @@
     }
     
     [self.peripherals removeObject:peripheral];
+    
+    [peripheral.nseOperation.channels removeAllObjects];
 }
 
 @end

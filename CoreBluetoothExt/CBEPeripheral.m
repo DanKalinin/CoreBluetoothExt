@@ -345,6 +345,8 @@
 
 @interface CBEPeripheralOperation ()
 
+@property NSMutableDictionary<NSNumber *, CBL2CAPChannel *> *channels;
+
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 @property (weak) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
@@ -363,6 +365,8 @@
     self = [super initWithObject:object];
     
     object.delegate = self;
+    
+    self.channels = NSMutableDictionary.dictionary;
     
     return self;
 }
@@ -490,6 +494,8 @@
         [self.l2capChannelOpening cancel];
     } else {
         [self.l2capChannelOpening finish];
+        
+        self.channels[@(channel.PSM)] = channel;
     }
 }
 

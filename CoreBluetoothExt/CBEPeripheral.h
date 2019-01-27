@@ -219,6 +219,8 @@
 @property CBEPeripheralAdvertisement *advertisement;
 @property NSNumber *rssi;
 
+@property (readonly) NSMutableDictionary<NSNumber *, CBL2CAPChannel *> *channels;
+
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
