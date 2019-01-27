@@ -364,7 +364,7 @@
     
     [self.peripherals removeObject:peripheral];
     
-    [peripheral.nseOperation.channels removeAllObjects];
+    [peripheral.nseOperation.l2capChannels removeAllObjects];
 }
 
 @end

@@ -7,6 +7,7 @@
 
 #import "CBEPeer.h"
 #import "CBEService.h"
+#import "CBEL2CAPChannel.h"
 
 @class CBEPeripheral;
 @class CBEPeripheralAdvertisement;
@@ -219,7 +220,7 @@
 @property CBEPeripheralAdvertisement *advertisement;
 @property NSNumber *rssi;
 
-@property (readonly) NSMutableDictionary<NSNumber *, CBL2CAPChannel *> *channels;
+@property (readonly) NSMutableDictionary<NSNumber *, CBL2CAPChannel *> *l2capChannels;
 
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
