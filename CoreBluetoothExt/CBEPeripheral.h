@@ -13,14 +13,14 @@
 @class CBEPeripheralAdvertisement;
 @class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralCharacteristicsDiscovery;
-@class CBEPeripheralCharacteristicValueReading;
+@class CBEPeripheralCharacteristicReading;
 @class CBEPeripheralL2CAPChannelOpening;
 @class CBEPeripheralOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralServicesDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicsDiscoveryDelegate;
-@protocol CBEPeripheralCharacteristicValueReadingDelegate;
+@protocol CBEPeripheralCharacteristicReadingDelegate;
 @protocol CBEPeripheralL2CAPChannelOpeningDelegate;
 
 
@@ -143,24 +143,24 @@
 
 
 
-@protocol CBEPeripheralCharacteristicValueReadingDelegate <NSETimeoutOperationDelegate>
+@protocol CBEPeripheralCharacteristicReadingDelegate <NSETimeoutOperationDelegate>
 
 @optional
-- (void)cbePeripheralCharacteristicValueReadingDidUpdateState:(CBEPeripheralCharacteristicValueReading *)reading;
-- (void)cbePeripheralCharacteristicValueReadingDidStart:(CBEPeripheralCharacteristicValueReading *)reading;
-- (void)cbePeripheralCharacteristicValueReadingDidCancel:(CBEPeripheralCharacteristicValueReading *)reading;
-- (void)cbePeripheralCharacteristicValueReadingDidFinish:(CBEPeripheralCharacteristicValueReading *)reading;
+- (void)cbePeripheralCharacteristicReadingDidUpdateState:(CBEPeripheralCharacteristicReading *)reading;
+- (void)cbePeripheralCharacteristicReadingDidStart:(CBEPeripheralCharacteristicReading *)reading;
+- (void)cbePeripheralCharacteristicReadingDidCancel:(CBEPeripheralCharacteristicReading *)reading;
+- (void)cbePeripheralCharacteristicReadingDidFinish:(CBEPeripheralCharacteristicReading *)reading;
 
-- (void)cbePeripheralCharacteristicValueReadingDidUpdateProgress:(CBEPeripheralCharacteristicValueReading *)reading;
+- (void)cbePeripheralCharacteristicReadingDidUpdateProgress:(CBEPeripheralCharacteristicReading *)reading;
 
 @end
 
 
 
-@interface CBEPeripheralCharacteristicValueReading : NSETimeoutOperation <CBEPeripheralCharacteristicValueReadingDelegate>
+@interface CBEPeripheralCharacteristicReading : NSETimeoutOperation <CBEPeripheralCharacteristicReadingDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicValueReadingDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralCharacteristicReadingDelegate> *delegates;
 @property (readonly) CBCharacteristic *characteristic;
 
 - (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
@@ -225,7 +225,7 @@
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
-@property (weak, readonly) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
+@property (weak, readonly) CBEPeripheralCharacteristicReading *characteristicValueReading;
 @property (weak, readonly) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
@@ -236,8 +236,8 @@
 - (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralCharacteristicsDiscovery *)discoverCharacteristics:(NSArray<CBUUID *> *)characteristics forService:(CBService *)service timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
-- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
-- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+- (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 - (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;

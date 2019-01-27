@@ -221,7 +221,7 @@
 
 
 
-@interface CBEPeripheralCharacteristicValueReading ()
+@interface CBEPeripheralCharacteristicReading ()
 
 @property CBCharacteristic *characteristic;
 
@@ -229,7 +229,7 @@
 
 
 
-@implementation CBEPeripheralCharacteristicValueReading
+@implementation CBEPeripheralCharacteristicReading
 
 @dynamic parent;
 @dynamic delegates;
@@ -245,29 +245,29 @@
 - (void)updateState:(NSEOperationState)state {
     [super updateState:state];
     
-    [self.delegates cbePeripheralCharacteristicValueReadingDidUpdateState:self];
+    [self.delegates cbePeripheralCharacteristicReadingDidUpdateState:self];
     if (state == NSEOperationStateDidStart) {
-        [self.delegates cbePeripheralCharacteristicValueReadingDidStart:self];
+        [self.delegates cbePeripheralCharacteristicReadingDidStart:self];
     } else if (state == NSEOperationStateDidCancel) {
-        [self.delegates cbePeripheralCharacteristicValueReadingDidCancel:self];
+        [self.delegates cbePeripheralCharacteristicReadingDidCancel:self];
     } else if (state == NSEOperationStateDidFinish) {
-        [self.delegates cbePeripheralCharacteristicValueReadingDidFinish:self];
+        [self.delegates cbePeripheralCharacteristicReadingDidFinish:self];
     }
 }
 
 - (void)updateProgress:(int64_t)completedUnitCount {
     [super updateProgress:completedUnitCount];
     
-    [self.delegates cbePeripheralCharacteristicValueReadingDidUpdateProgress:self];
+    [self.delegates cbePeripheralCharacteristicReadingDidUpdateProgress:self];
 }
 
-#pragma mark - CBEPeripheralCharacteristicValueReadingDelegate
+#pragma mark - CBEPeripheralCharacteristicReadingDelegate
 
-- (void)cbePeripheralCharacteristicValueReadingDidStart:(CBEPeripheralCharacteristicValueReading *)reading {
+- (void)cbePeripheralCharacteristicReadingDidStart:(CBEPeripheralCharacteristicReading *)reading {
     [self.parent.object readValueForCharacteristic:self.characteristic];
 }
 
-- (void)cbePeripheralCharacteristicValueReadingDidCancel:(CBEPeripheralCharacteristicValueReading *)reading {
+- (void)cbePeripheralCharacteristicReadingDidCancel:(CBEPeripheralCharacteristicReading *)reading {
     [self finish];
 }
 
@@ -349,7 +349,7 @@
 
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
-@property (weak) CBEPeripheralCharacteristicValueReading *characteristicValueReading;
+@property (weak) CBEPeripheralCharacteristicReading *characteristicValueReading;
 @property (weak) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 @end
@@ -415,16 +415,16 @@
     return discovery;
 }
 
-- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout {
-    self.characteristicValueReading = [CBEPeripheralCharacteristicValueReading.alloc initWithCharacteristic:characteristic timeout:timeout].nseAutorelease;
+- (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout {
+    self.characteristicValueReading = [CBEPeripheralCharacteristicReading.alloc initWithCharacteristic:characteristic timeout:timeout].nseAutorelease;
     
     [self addOperation:self.characteristicValueReading];
     
     return self.characteristicValueReading;
 }
 
-- (CBEPeripheralCharacteristicValueReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
-    CBEPeripheralCharacteristicValueReading *reading = [self readValueForCharacteristic:characteristic timeout:timeout];
+- (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBEPeripheralCharacteristicReading *reading = [self readValueForCharacteristic:characteristic timeout:timeout];
     
     reading.completion = completion;
     
