@@ -209,7 +209,7 @@
 
 
 
-@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEPeripheralServicesDiscoveryDelegate>
+@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEL2CAPChannelDelegate, CBEPeripheralServicesDiscoveryDelegate, CBEPeripheralCharacteristicsDiscoveryDelegate, CBEPeripheralCharacteristicReadingDelegate, CBEPeripheralL2CAPChannelOpeningDelegate>
 
 @end
 
