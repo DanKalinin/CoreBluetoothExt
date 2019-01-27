@@ -225,7 +225,7 @@
 @property (weak, readonly) CBPeripheral *object;
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
-@property (weak, readonly) CBEPeripheralCharacteristicReading *characteristicValueReading;
+@property (weak, readonly) CBEPeripheralCharacteristicReading *characteristicReading;
 @property (weak, readonly) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;

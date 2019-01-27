@@ -349,7 +349,7 @@
 
 @property (weak) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
-@property (weak) CBEPeripheralCharacteristicReading *characteristicValueReading;
+@property (weak) CBEPeripheralCharacteristicReading *characteristicReading;
 @property (weak) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
 
 @end
@@ -416,11 +416,11 @@
 }
 
 - (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout {
-    self.characteristicValueReading = [CBEPeripheralCharacteristicReading.alloc initWithCharacteristic:characteristic timeout:timeout].nseAutorelease;
+    self.characteristicReading = [CBEPeripheralCharacteristicReading.alloc initWithCharacteristic:characteristic timeout:timeout].nseAutorelease;
     
-    [self addOperation:self.characteristicValueReading];
+    [self addOperation:self.characteristicReading];
     
-    return self.characteristicValueReading;
+    return self.characteristicReading;
 }
 
 - (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
@@ -481,10 +481,10 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
-        self.characteristicValueReading.error = error;
-        [self.characteristicValueReading cancel];
+        self.characteristicReading.error = error;
+        [self.characteristicReading cancel];
     } else {
-        [self.characteristicValueReading finish];
+        [self.characteristicReading finish];
     }
 }
 
@@ -496,6 +496,7 @@
         [self.l2capChannelOpening finish];
         
         self.l2capChannels[@(channel.PSM)] = channel;
+        [channel.nseOperation.streams.delegates addObject:self.delegates];
     }
 }
 
