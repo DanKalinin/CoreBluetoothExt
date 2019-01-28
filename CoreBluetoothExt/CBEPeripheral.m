@@ -493,10 +493,10 @@
         self.l2capChannelOpening.error = error;
         [self.l2capChannelOpening cancel];
     } else {
-        [self.l2capChannelOpening finish];
-        
         self.l2capChannels[@(channel.PSM)] = channel;
         [channel.nseOperation.streams.delegates addObject:self.delegates];
+        
+        [self.l2capChannelOpening finish];
     }
 }
 
