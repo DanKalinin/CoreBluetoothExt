@@ -7,6 +7,8 @@
 
 #import "CBEMain.h"
 
+@class CBEObject;
+
 
 
 
