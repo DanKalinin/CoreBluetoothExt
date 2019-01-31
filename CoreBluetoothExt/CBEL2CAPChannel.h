@@ -5,7 +5,7 @@
 //  Created by Dan Kalinin on 1/28/19.
 //
 
-#import "CBEMain.h"
+#import "CBEObject.h"
 
 @class CBEL2CAPChannel;
 @class CBEL2CAPChannelOperation;
@@ -23,7 +23,7 @@
 
 @interface CBL2CAPChannel (CBE)
 
-@property (readonly) CBEL2CAPChannelOperation *nseOperation;
+@property (readonly) CBEL2CAPChannelOperation *cbeOperation;
 
 @end
 

@@ -30,7 +30,7 @@
 
 @interface CBCentralManager (CBE)
 
-@property (readonly) CBECentralManagerOperation *nseOperation;
+@property (readonly) CBECentralManagerOperation *cbeOperation;
 
 @end
 

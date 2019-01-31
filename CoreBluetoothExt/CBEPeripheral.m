@@ -19,9 +19,9 @@
 
 @implementation CBPeripheral (CBE)
 
-@dynamic nseOperation;
+@dynamic cbeOperation;
 
-- (Class)nseOperationClass {
+- (Class)cbeOperationClass {
     return CBEPeripheralOperation.class;
 }
 
@@ -198,7 +198,7 @@
 #pragma mark - CBEPeripheralCharacteristicsDiscoveryDelegate
 
 - (void)cbePeripheralCharacteristicsDiscoveryDidStart:(CBEPeripheralCharacteristicsDiscovery *)discovery {
-    NSArray *characteristics = [self.service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristics];
+    NSArray *characteristics = [self.service.cbeOperation retrieveCharacteristicsWithIdentifiers:self.characteristics];
     if (characteristics.count < self.characteristics.count) {
         [self.parent.object discoverCharacteristics:self.characteristics forService:self.service];
     } else {
@@ -469,7 +469,7 @@
         self.characteristicsDiscovery.error = error;
         [self.characteristicsDiscovery cancel];
     } else {
-        NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristicsDiscovery.characteristics];
+        NSArray *characteristics = [service.cbeOperation retrieveCharacteristicsWithIdentifiers:self.characteristicsDiscovery.characteristics];
         if (characteristics.count < self.characteristicsDiscovery.characteristics.count) {
             self.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
             [self.characteristicsDiscovery cancel];
@@ -494,7 +494,7 @@
         [self.l2capChannelOpening cancel];
     } else {
         self.l2capChannels[@(channel.PSM)] = channel;
-        [channel.nseOperation.streams.delegates addObject:self.delegates];
+        [channel.cbeOperation.streams.delegates addObject:self.delegates];
         
         [self.l2capChannelOpening finish];
     }

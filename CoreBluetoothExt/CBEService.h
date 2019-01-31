@@ -23,7 +23,7 @@
 
 @interface CBService (CBE)
 
-@property (readonly) CBEServiceOperation *nseOperation;
+@property (readonly) CBEServiceOperation *cbeOperation;
 
 @end
 

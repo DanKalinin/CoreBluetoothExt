@@ -34,7 +34,7 @@
 
 @interface CBPeripheral (CBE)
 
-@property (readonly) CBEPeripheralOperation *nseOperation;
+@property (readonly) CBEPeripheralOperation *cbeOperation;
 
 @end
 

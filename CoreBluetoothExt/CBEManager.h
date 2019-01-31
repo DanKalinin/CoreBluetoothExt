@@ -5,7 +5,7 @@
 //  Created by Dan Kalinin on 1/19/19.
 //
 
-#import "CBEMain.h"
+#import "CBEObject.h"
 
 @class CBEManager;
 @class CBEManagerOperation;
@@ -25,7 +25,7 @@
 
 @interface CBManager (CBE)
 
-@property (readonly) CBEManagerOperation *nseOperation;
+@property (readonly) CBEManagerOperation *cbeOperation;
 
 @end
 

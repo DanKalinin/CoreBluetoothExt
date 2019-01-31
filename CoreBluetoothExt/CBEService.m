@@ -18,9 +18,9 @@
 
 @implementation CBService (CBE)
 
-@dynamic nseOperation;
+@dynamic cbeOperation;
 
-- (Class)nseOperationClass {
+- (Class)cbeOperationClass {
     return CBEServiceOperation.class;
 }
 
