@@ -5,7 +5,7 @@
 //  Created by Dan Kalinin on 1/23/19.
 //
 
-#import "CBEObject.h"
+#import "CBEMain.h"
 
 @class CBEAttribute;
 @class CBEAttributeOperation;
@@ -23,7 +23,7 @@
 
 @interface CBAttribute (CBE)
 
-@property (readonly) CBEAttributeOperation *cbeOperation;
+@property (readonly) CBEAttributeOperation *nseOperation;
 
 @end
 

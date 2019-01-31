@@ -5,7 +5,7 @@
 //  Created by Dan Kalinin on 1/19/19.
 //
 
-#import "CBEObject.h"
+#import "CBEMain.h"
 
 @class CBEPeer;
 @class CBEPeerOperation;
@@ -23,7 +23,7 @@
 
 @interface CBPeer (CBE)
 
-@property (readonly) CBEPeerOperation *cbeOperation;
+@property (readonly) CBEPeerOperation *nseOperation;
 
 @end
 

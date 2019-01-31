@@ -18,9 +18,9 @@
 
 @implementation CBPeer (CBE)
 
-@dynamic cbeOperation;
+@dynamic nseOperation;
 
-- (Class)cbeOperationClass {
+- (Class)nseOperationClass {
     return CBEPeerOperation.class;
 }
 

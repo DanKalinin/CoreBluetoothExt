@@ -18,9 +18,9 @@
 
 @implementation CBAttribute (CBE)
 
-@dynamic cbeOperation;
+@dynamic nseOperation;
 
-- (Class)cbeOperationClass {
+- (Class)nseOperationClass {
     return CBEAttributeOperation.class;
 }
 

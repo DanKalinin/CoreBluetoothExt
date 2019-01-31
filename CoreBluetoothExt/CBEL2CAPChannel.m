@@ -18,9 +18,9 @@
 
 @implementation CBL2CAPChannel (CBE)
 
-@dynamic cbeOperation;
+@dynamic nseOperation;
 
-- (Class)cbeOperationClass {
+- (Class)nseOperationClass {
     return CBEL2CAPChannelOperation.class;
 }
 

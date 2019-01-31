@@ -18,9 +18,9 @@
 
 @implementation CBCentralManager (CBE)
 
-@dynamic cbeOperation;
+@dynamic nseOperation;
 
-- (Class)cbeOperationClass {
+- (Class)nseOperationClass {
     return CBECentralManagerOperation.class;
 }
 
@@ -334,8 +334,8 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     CBEPeripheralAdvertisement *advertisement = [CBEPeripheralAdvertisement.alloc initWithDictionary:advertisementData];
     
-    peripheral.cbeOperation.advertisement = advertisement;
-    peripheral.cbeOperation.rssi = RSSI;
+    peripheral.nseOperation.advertisement = advertisement;
+    peripheral.nseOperation.rssi = RSSI;
     
     self.didDiscoverPeripheral = [CBECentralManagerDidDiscoverPeripheral.alloc initWithPeripheral:peripheral advertisement:advertisement rssi:RSSI].nseAutorelease;
     [self.delegates cbeCentralManagerDidDiscoverPeripheral:central];
@@ -346,7 +346,7 @@
     
     [self.peripherals addObject:peripheral];
     
-    [peripheral.cbeOperation.delegates addObject:self.delegates];
+    [peripheral.nseOperation.delegates addObject:self.delegates];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -364,7 +364,7 @@
     
     [self.peripherals removeObject:peripheral];
     
-    [peripheral.cbeOperation.l2capChannels removeAllObjects];
+    [peripheral.nseOperation.l2capChannels removeAllObjects];
 }
 
 @end
