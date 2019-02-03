@@ -451,12 +451,12 @@
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     if (error) {
         self.servicesDiscovery.error = error;
-        [self.servicesDiscovery cancel];
+        [self.servicesDiscovery finish];
     } else {
         NSArray *services = [self retrieveServicesWithIdentifiers:self.servicesDiscovery.services];
         if (services.count < self.servicesDiscovery.services.count) {
             self.servicesDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
-            [self.servicesDiscovery cancel];
+            [self.servicesDiscovery finish];
         } else {
             [self.servicesDiscovery finish];
         }
@@ -466,12 +466,12 @@
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     if (error) {
         self.characteristicsDiscovery.error = error;
-        [self.characteristicsDiscovery cancel];
+        [self.characteristicsDiscovery finish];
     } else {
         NSArray *characteristics = [service.nseOperation retrieveCharacteristicsWithIdentifiers:self.characteristicsDiscovery.characteristics];
         if (characteristics.count < self.characteristicsDiscovery.characteristics.count) {
             self.characteristicsDiscovery.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorLessAttributes userInfo:nil];
-            [self.characteristicsDiscovery cancel];
+            [self.characteristicsDiscovery finish];
         } else {
             [self.characteristicsDiscovery finish];
         }
@@ -481,7 +481,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         self.characteristicReading.error = error;
-        [self.characteristicReading cancel];
+        [self.characteristicReading finish];
     } else {
         [self.characteristicReading finish];
     }
@@ -490,7 +490,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error {
     if (error) {
         self.l2capChannelOpening.error = error;
-        [self.l2capChannelOpening cancel];
+        [self.l2capChannelOpening finish];
     } else {
         self.l2capChannels[@(channel.PSM)] = channel;
         [channel.nseOperation.streams.delegates addObject:self.delegates];
