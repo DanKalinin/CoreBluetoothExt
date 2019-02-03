@@ -89,7 +89,6 @@
 @interface CBEPeripheralServicesDiscovery ()
 
 @property NSArray<CBUUID *> *services;
-@property CBECentralManagerPeripheralDisconnection *disconnection;
 
 @end
 

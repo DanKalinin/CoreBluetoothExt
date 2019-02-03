@@ -11,13 +11,13 @@
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
 @class CBECentralManagerDidDisconnectPeripheral;
-@class CBECentralManagerPeripheralDisconnection;;
-@class CBECentralManagerPeripheralConnection;
+@class CBECentralManagerDisconnection;;
+@class CBECentralManagerConnection;
 @class CBECentralManagerOperation;
 
 @protocol CBECentralManagerDelegate;
-@protocol CBECentralManagerPeripheralDisconnectionDelegate;
-@protocol CBECentralManagerPeripheralConnectionDelegate;
+@protocol CBECentralManagerDisconnectionDelegate;
+@protocol CBECentralManagerConnectionDelegate;
 
 
 
@@ -93,24 +93,24 @@
 
 
 
-@protocol CBECentralManagerPeripheralDisconnectionDelegate <NSEOperationDelegate>
+@protocol CBECentralManagerDisconnectionDelegate <NSEOperationDelegate>
 
 @optional
-- (void)cbeCentralManagerPeripheralDisconnectionDidUpdateState:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidStart:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidCancel:(CBECentralManagerPeripheralDisconnection *)disconnection;
-- (void)cbeCentralManagerPeripheralDisconnectionDidFinish:(CBECentralManagerPeripheralDisconnection *)disconnection;
+- (void)cbeCentralManagerDisconnectionDidUpdateState:(CBECentralManagerDisconnection *)disconnection;
+- (void)cbeCentralManagerDisconnectionDidStart:(CBECentralManagerDisconnection *)disconnection;
+- (void)cbeCentralManagerDisconnectionDidCancel:(CBECentralManagerDisconnection *)disconnection;
+- (void)cbeCentralManagerDisconnectionDidFinish:(CBECentralManagerDisconnection *)disconnection;
 
-- (void)cbeCentralManagerPeripheralDisconnectionDidUpdateProgress:(CBECentralManagerPeripheralDisconnection *)disconnection;
+- (void)cbeCentralManagerDisconnectionDidUpdateProgress:(CBECentralManagerDisconnection *)disconnection;
 
 @end
 
 
 
-@interface CBECentralManagerPeripheralDisconnection : NSEOperation <CBECentralManagerPeripheralDisconnectionDelegate>
+@interface CBECentralManagerDisconnection : NSEOperation <CBECentralManagerDisconnectionDelegate>
 
 @property (readonly) CBECentralManagerOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBECentralManagerPeripheralDisconnectionDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBECentralManagerDisconnectionDelegate> *delegates;
 @property (readonly) CBPeripheral *peripheral;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
@@ -126,27 +126,27 @@
 
 
 
-@protocol CBECentralManagerPeripheralConnectionDelegate <NSETimeoutOperationDelegate>
+@protocol CBECentralManagerConnectionDelegate <NSETimeoutOperationDelegate>
 
 @optional
-- (void)cbeCentralManagerPeripheralConnectionDidUpdateState:(CBECentralManagerPeripheralConnection *)connection;
-- (void)cbeCentralManagerPeripheralConnectionDidStart:(CBECentralManagerPeripheralConnection *)connection;
-- (void)cbeCentralManagerPeripheralConnectionDidCancel:(CBECentralManagerPeripheralConnection *)connection;
-- (void)cbeCentralManagerPeripheralConnectionDidFinish:(CBECentralManagerPeripheralConnection *)connection;
+- (void)cbeCentralManagerConnectionDidUpdateState:(CBECentralManagerConnection *)connection;
+- (void)cbeCentralManagerConnectionDidStart:(CBECentralManagerConnection *)connection;
+- (void)cbeCentralManagerConnectionDidCancel:(CBECentralManagerConnection *)connection;
+- (void)cbeCentralManagerConnectionDidFinish:(CBECentralManagerConnection *)connection;
 
-- (void)cbeCentralManagerPeripheralConnectionDidUpdateProgress:(CBECentralManagerPeripheralConnection *)connection;
+- (void)cbeCentralManagerConnectionDidUpdateProgress:(CBECentralManagerConnection *)connection;
 
 @end
 
 
 
-@interface CBECentralManagerPeripheralConnection : NSETimeoutOperation <CBECentralManagerPeripheralConnectionDelegate, CBECentralManagerPeripheralDisconnectionDelegate>
+@interface CBECentralManagerConnection : NSETimeoutOperation <CBECentralManagerConnectionDelegate, CBECentralManagerDisconnectionDelegate>
 
 @property (readonly) CBECentralManagerOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBECentralManagerPeripheralConnectionDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBECentralManagerConnectionDelegate> *delegates;
 @property (readonly) CBPeripheral *peripheral;
 @property (readonly) NSDictionary *options;
-@property (readonly) CBECentralManagerPeripheralDisconnection *disconnection;
+@property (readonly) CBECentralManagerDisconnection *disconnection;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
 
@@ -161,7 +161,7 @@
 
 
 
-@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate, CBECentralManagerPeripheralDisconnectionDelegate, CBECentralManagerPeripheralConnectionDelegate>
+@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate, CBECentralManagerDisconnectionDelegate, CBECentralManagerConnectionDelegate>
 
 @optional
 - (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;
@@ -180,13 +180,13 @@
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 @property (weak, readonly) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
-@property (weak, readonly) CBECentralManagerPeripheralDisconnection *disconnection;
-@property (weak, readonly) CBECentralManagerPeripheralConnection *connection;
+@property (weak, readonly) CBECentralManagerDisconnection *disconnection;
+@property (weak, readonly) CBECentralManagerConnection *connection;
 
-- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral;
-- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion;
+- (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral;
+- (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion;
 
-- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
-- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+- (CBECentralManagerConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+- (CBECentralManagerConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end

@@ -118,7 +118,7 @@
 
 
 
-@interface CBECentralManagerPeripheralDisconnection ()
+@interface CBECentralManagerDisconnection ()
 
 @property CBPeripheral *peripheral;
 
@@ -126,7 +126,7 @@
 
 
 
-@implementation CBECentralManagerPeripheralDisconnection
+@implementation CBECentralManagerDisconnection
 
 @dynamic parent;
 @dynamic delegates;
@@ -142,25 +142,25 @@
 - (void)updateState:(NSEOperationState)state {
     [super updateState:state];
     
-    [self.delegates cbeCentralManagerPeripheralDisconnectionDidUpdateState:self];
+    [self.delegates cbeCentralManagerDisconnectionDidUpdateState:self];
     if (state == NSEOperationStateDidStart) {
-        [self.delegates cbeCentralManagerPeripheralDisconnectionDidStart:self];
+        [self.delegates cbeCentralManagerDisconnectionDidStart:self];
     } else if (state == NSEOperationStateDidCancel) {
-        [self.delegates cbeCentralManagerPeripheralDisconnectionDidCancel:self];
+        [self.delegates cbeCentralManagerDisconnectionDidCancel:self];
     } else if (state == NSEOperationStateDidFinish) {
-        [self.delegates cbeCentralManagerPeripheralDisconnectionDidFinish:self];
+        [self.delegates cbeCentralManagerDisconnectionDidFinish:self];
     }
 }
 
 - (void)updateProgress:(int64_t)completedUnitCount {
     [super updateProgress:completedUnitCount];
     
-    [self.delegates cbeCentralManagerPeripheralDisconnectionDidUpdateProgress:self];
+    [self.delegates cbeCentralManagerDisconnectionDidUpdateProgress:self];
 }
 
-#pragma mark - CBECentralManagerPeripheralDisconnectionDelegate
+#pragma mark - CBECentralManagerDisconnectionDelegate
 
-- (void)cbeCentralManagerPeripheralDisconnectionDidStart:(CBECentralManagerPeripheralDisconnection *)disconnection {
+- (void)cbeCentralManagerDisconnectionDidStart:(CBECentralManagerDisconnection *)disconnection {
     if (self.peripheral.state == CBPeripheralStateDisconnected) {
         [self finish];
     } else {
@@ -182,17 +182,17 @@
 
 
 
-@interface CBECentralManagerPeripheralConnection ()
+@interface CBECentralManagerConnection ()
 
 @property CBPeripheral *peripheral;
 @property NSDictionary *options;
-@property CBECentralManagerPeripheralDisconnection *disconnection;
+@property CBECentralManagerDisconnection *disconnection;
 
 @end
 
 
 
-@implementation CBECentralManagerPeripheralConnection
+@implementation CBECentralManagerConnection
 
 @dynamic parent;
 @dynamic delegates;
@@ -209,25 +209,25 @@
 - (void)updateState:(NSEOperationState)state {
     [super updateState:state];
     
-    [self.delegates cbeCentralManagerPeripheralConnectionDidUpdateState:self];
+    [self.delegates cbeCentralManagerConnectionDidUpdateState:self];
     if (state == NSEOperationStateDidStart) {
-        [self.delegates cbeCentralManagerPeripheralConnectionDidStart:self];
+        [self.delegates cbeCentralManagerConnectionDidStart:self];
     } else if (state == NSEOperationStateDidCancel) {
-        [self.delegates cbeCentralManagerPeripheralConnectionDidCancel:self];
+        [self.delegates cbeCentralManagerConnectionDidCancel:self];
     } else if (state == NSEOperationStateDidFinish) {
-        [self.delegates cbeCentralManagerPeripheralConnectionDidFinish:self];
+        [self.delegates cbeCentralManagerConnectionDidFinish:self];
     }
 }
 
 - (void)updateProgress:(int64_t)completedUnitCount {
     [super updateProgress:completedUnitCount];
     
-    [self.delegates cbeCentralManagerPeripheralConnectionDidUpdateProgress:self];
+    [self.delegates cbeCentralManagerConnectionDidUpdateProgress:self];
 }
 
-#pragma mark - CBECentralManagerPeripheralConnectionDelegate
+#pragma mark - CBECentralManagerConnectionDelegate
 
-- (void)cbeCentralManagerPeripheralConnectionDidStart:(CBECentralManagerPeripheralConnection *)connection {
+- (void)cbeCentralManagerConnectionDidStart:(CBECentralManagerConnection *)connection {
     if (self.peripheral.state == CBPeripheralStateConnected) {
         [self finish];
     } else {
@@ -238,14 +238,14 @@
     }
 }
 
-- (void)cbeCentralManagerPeripheralConnectionDidCancel:(CBECentralManagerPeripheralConnection *)connection {
+- (void)cbeCentralManagerConnectionDidCancel:(CBECentralManagerConnection *)connection {
     self.disconnection = [self.parent disconnectPeripheral:self.peripheral];
     [self.disconnection.delegates addObject:self];
 }
 
-#pragma mark - CBECentralManagerPeripheralDisconnectionDelegate
+#pragma mark - CBECentralManagerDisconnectionDelegate
 
-- (void)cbeCentralManagerPeripheralDisconnectionDidFinish:(CBECentralManagerPeripheralDisconnection *)disconnection {
+- (void)cbeCentralManagerDisconnectionDidFinish:(CBECentralManagerDisconnection *)disconnection {
     [self finish];
 }
 
@@ -266,8 +266,8 @@
 
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 @property (weak) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
-@property (weak) CBECentralManagerPeripheralDisconnection *disconnection;
-@property (weak) CBECentralManagerPeripheralConnection *connection;
+@property (weak) CBECentralManagerDisconnection *disconnection;
+@property (weak) CBECentralManagerConnection *connection;
 
 @end
 
@@ -288,32 +288,32 @@
     return self;
 }
 
-- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral {
-    self.disconnection = [CBECentralManagerPeripheralDisconnection.alloc initWithPeripheral:peripheral].nseAutorelease;
+- (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral {
+    self.disconnection = [CBECentralManagerDisconnection.alloc initWithPeripheral:peripheral].nseAutorelease;
     
     [self addOperation:self.disconnection];
     
     return self.disconnection;
 }
 
-- (CBECentralManagerPeripheralDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion {
-    CBECentralManagerPeripheralDisconnection *disconnection = [self disconnectPeripheral:peripheral];
+- (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion {
+    CBECentralManagerDisconnection *disconnection = [self disconnectPeripheral:peripheral];
     
     disconnection.completion = completion;
     
     return disconnection;
 }
 
-- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
-    self.connection = [CBECentralManagerPeripheralConnection.alloc initWithPeripheral:peripheral options:options timeout:timeout].nseAutorelease;
+- (CBECentralManagerConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    self.connection = [CBECentralManagerConnection.alloc initWithPeripheral:peripheral options:options timeout:timeout].nseAutorelease;
     
     [self addOperation:self.connection];
     
     return self.connection;
 }
 
-- (CBECentralManagerPeripheralConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
-    CBECentralManagerPeripheralConnection *connection = [self connectPeripheral:peripheral options:options timeout:timeout];
+- (CBECentralManagerConnection *)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBECentralManagerConnection *connection = [self connectPeripheral:peripheral options:options timeout:timeout];
     
     connection.completion = completion;
     
