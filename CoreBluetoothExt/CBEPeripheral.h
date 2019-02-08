@@ -14,14 +14,14 @@
 @class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralCharacteristicsDiscovery;
 @class CBEPeripheralCharacteristicReading;
-@class CBEPeripheralL2CAPChannelOpening;
+@class CBEPeripheralL2CAPOpening;
 @class CBEPeripheralOperation;
 
 @protocol CBEPeripheralDelegate;
 @protocol CBEPeripheralServicesDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicsDiscoveryDelegate;
 @protocol CBEPeripheralCharacteristicReadingDelegate;
-@protocol CBEPeripheralL2CAPChannelOpeningDelegate;
+@protocol CBEPeripheralL2CAPOpeningDelegate;
 
 
 
@@ -176,24 +176,24 @@
 
 
 
-@protocol CBEPeripheralL2CAPChannelOpeningDelegate <NSETimeoutOperationDelegate>
+@protocol CBEPeripheralL2CAPOpeningDelegate <NSETimeoutOperationDelegate>
 
 @optional
-- (void)cbePeripheralL2CAPChannelOpeningDidUpdateState:(CBEPeripheralL2CAPChannelOpening *)opening;
-- (void)cbePeripheralL2CAPChannelOpeningDidStart:(CBEPeripheralL2CAPChannelOpening *)opening;
-- (void)cbePeripheralL2CAPChannelOpeningDidCancel:(CBEPeripheralL2CAPChannelOpening *)opening;
-- (void)cbePeripheralL2CAPChannelOpeningDidFinish:(CBEPeripheralL2CAPChannelOpening *)opening;
+- (void)CBEPeripheralL2CAPOpeningDidUpdateState:(CBEPeripheralL2CAPOpening *)opening;
+- (void)CBEPeripheralL2CAPOpeningDidStart:(CBEPeripheralL2CAPOpening *)opening;
+- (void)CBEPeripheralL2CAPOpeningDidCancel:(CBEPeripheralL2CAPOpening *)opening;
+- (void)CBEPeripheralL2CAPOpeningDidFinish:(CBEPeripheralL2CAPOpening *)opening;
 
-- (void)cbePeripheralL2CAPChannelOpeningDidUpdateProgress:(CBEPeripheralL2CAPChannelOpening *)opening;
+- (void)CBEPeripheralL2CAPOpeningDidUpdateProgress:(CBEPeripheralL2CAPOpening *)opening;
 
 @end
 
 
 
-@interface CBEPeripheralL2CAPChannelOpening : NSETimeoutOperation <CBEPeripheralL2CAPChannelOpeningDelegate>
+@interface CBEPeripheralL2CAPOpening : NSETimeoutOperation <CBEPeripheralL2CAPOpeningDelegate>
 
 @property (readonly) CBEPeripheralOperation *parent;
-@property (readonly) NSMutableOrderedSet<CBEPeripheralL2CAPChannelOpeningDelegate> *delegates;
+@property (readonly) NSMutableOrderedSet<CBEPeripheralL2CAPOpeningDelegate> *delegates;
 @property (readonly) CBL2CAPPSM psm;
 
 - (instancetype)initWithPSM:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
@@ -209,7 +209,7 @@
 
 
 
-@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEL2CAPChannelDelegate, CBEPeripheralServicesDiscoveryDelegate, CBEPeripheralCharacteristicsDiscoveryDelegate, CBEPeripheralCharacteristicReadingDelegate, CBEPeripheralL2CAPChannelOpeningDelegate>
+@protocol CBEPeripheralDelegate <CBEPeerDelegate, CBEL2CAPChannelDelegate, CBEPeripheralServicesDiscoveryDelegate, CBEPeripheralCharacteristicsDiscoveryDelegate, CBEPeripheralCharacteristicReadingDelegate, CBEPeripheralL2CAPOpeningDelegate>
 
 @end
 
@@ -226,7 +226,7 @@
 @property (weak, readonly) CBEPeripheralServicesDiscovery *servicesDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicsDiscovery *characteristicsDiscovery;
 @property (weak, readonly) CBEPeripheralCharacteristicReading *characteristicReading;
-@property (weak, readonly) CBEPeripheralL2CAPChannelOpening *l2capChannelOpening;
+@property (weak, readonly) CBEPeripheralL2CAPOpening *l2capOpening;
 
 - (NSArray<CBService *> *)retrieveServicesWithIdentifiers:(NSArray<CBUUID *> *)identifiers;
 
@@ -239,7 +239,7 @@
 - (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout;
 - (CBEPeripheralCharacteristicReading *)readValueForCharacteristic:(CBCharacteristic *)characteristic timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
-- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
-- (CBEPeripheralL2CAPChannelOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
+- (CBEPeripheralL2CAPOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout;
+- (CBEPeripheralL2CAPOpening *)openL2CAPChannel:(CBL2CAPPSM)psm timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 @end
