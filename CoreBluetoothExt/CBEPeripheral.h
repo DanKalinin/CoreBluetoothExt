@@ -179,12 +179,12 @@
 @protocol CBEPeripheralL2CAPOpeningDelegate <NSETimeoutOperationDelegate>
 
 @optional
-- (void)CBEPeripheralL2CAPOpeningDidUpdateState:(CBEPeripheralL2CAPOpening *)opening;
-- (void)CBEPeripheralL2CAPOpeningDidStart:(CBEPeripheralL2CAPOpening *)opening;
-- (void)CBEPeripheralL2CAPOpeningDidCancel:(CBEPeripheralL2CAPOpening *)opening;
-- (void)CBEPeripheralL2CAPOpeningDidFinish:(CBEPeripheralL2CAPOpening *)opening;
+- (void)cbePeripheralL2CAPOpeningDidUpdateState:(CBEPeripheralL2CAPOpening *)opening;
+- (void)cbePeripheralL2CAPOpeningDidStart:(CBEPeripheralL2CAPOpening *)opening;
+- (void)cbePeripheralL2CAPOpeningDidCancel:(CBEPeripheralL2CAPOpening *)opening;
+- (void)cbePeripheralL2CAPOpeningDidFinish:(CBEPeripheralL2CAPOpening *)opening;
 
-- (void)CBEPeripheralL2CAPOpeningDidUpdateProgress:(CBEPeripheralL2CAPOpening *)opening;
+- (void)cbePeripheralL2CAPOpeningDidUpdateProgress:(CBEPeripheralL2CAPOpening *)opening;
 
 @end
 

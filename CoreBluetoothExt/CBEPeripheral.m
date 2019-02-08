@@ -305,29 +305,29 @@
 - (void)updateState:(NSEOperationState)state {
     [super updateState:state];
     
-    [self.delegates CBEPeripheralL2CAPOpeningDidUpdateState:self];
+    [self.delegates cbePeripheralL2CAPOpeningDidUpdateState:self];
     if (state == NSEOperationStateDidStart) {
-        [self.delegates CBEPeripheralL2CAPOpeningDidStart:self];
+        [self.delegates cbePeripheralL2CAPOpeningDidStart:self];
     } else if (state == NSEOperationStateDidCancel) {
-        [self.delegates CBEPeripheralL2CAPOpeningDidCancel:self];
+        [self.delegates cbePeripheralL2CAPOpeningDidCancel:self];
     } else if (state == NSEOperationStateDidFinish) {
-        [self.delegates CBEPeripheralL2CAPOpeningDidFinish:self];
+        [self.delegates cbePeripheralL2CAPOpeningDidFinish:self];
     }
 }
 
 - (void)updateProgress:(int64_t)completedUnitCount {
     [super updateProgress:completedUnitCount];
     
-    [self.delegates CBEPeripheralL2CAPOpeningDidUpdateProgress:self];
+    [self.delegates cbePeripheralL2CAPOpeningDidUpdateProgress:self];
 }
 
 #pragma mark - CBEPeripheralL2CAPOpeningDelegate
 
-- (void)CBEPeripheralL2CAPOpeningDidStart:(CBEPeripheralL2CAPOpening *)opening {
+- (void)cbePeripheralL2CAPOpeningDidStart:(CBEPeripheralL2CAPOpening *)opening {
     [self.parent.object openL2CAPChannel:self.psm];
 }
 
-- (void)CBEPeripheralL2CAPOpeningDidCancel:(CBEPeripheralL2CAPOpening *)opening {
+- (void)cbePeripheralL2CAPOpeningDidCancel:(CBEPeripheralL2CAPOpening *)opening {
     [self finish];
 }
 
