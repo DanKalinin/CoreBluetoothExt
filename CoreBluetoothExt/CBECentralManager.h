@@ -12,7 +12,7 @@
 @class CBECentralManagerDidDiscoverPeripheral;
 @class CBECentralManagerDidDisconnectPeripheral;
 @class CBECentralManagerScanning;
-@class CBECentralManagerDisconnection;;
+@class CBECentralManagerDisconnection;
 @class CBECentralManagerConnection;
 @class CBECentralManagerOperation;
 
