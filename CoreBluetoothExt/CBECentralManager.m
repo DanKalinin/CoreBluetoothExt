@@ -118,6 +118,75 @@
 
 
 
+@interface CBECentralManagerScanning ()
+
+@property NSArray<CBUUID *> *services;
+@property NSDictionary *options;
+
+@end
+
+
+
+@implementation CBECentralManagerScanning
+
+@dynamic parent;
+@dynamic delegates;
+
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    self = [super initWithTimeout:timeout];
+    
+    self.services = services;
+    self.options = options;
+    
+    return self;
+}
+
+- (void)updateState:(NSEOperationState)state {
+    [super updateState:state];
+    
+    [self.delegates cbeCentralManagerScanningDidUpdateState:self];
+    if (state == NSEOperationStateDidStart) {
+        [self.delegates cbeCentralManagerScanningDidStart:self];
+    } else if (state == NSEOperationStateDidCancel) {
+        [self.delegates cbeCentralManagerScanningDidCancel:self];
+    } else if (state == NSEOperationStateDidFinish) {
+        [self.delegates cbeCentralManagerScanningDidFinish:self];
+    }
+}
+
+- (void)updateProgress:(int64_t)completedUnitCount {
+    [super updateProgress:completedUnitCount];
+    
+    [self.delegates cbeCentralManagerScanningDidUpdateProgress:self];
+}
+
+#pragma mark - CBECentralManagerScanningDelegate
+
+- (void)cbeCentralManagerScanningDidStart:(CBECentralManagerScanning *)scanning {
+    if (self.parent.object.state == CBManagerStatePoweredOn) {
+        [self.parent.object scanForPeripheralsWithServices:self.services options:self.options];
+    } else {
+        self.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorPoweredOff userInfo:nil];
+        [self finish];
+    }
+}
+
+- (void)cbeCentralManagerScanningDidCancel:(CBECentralManagerScanning *)scanning {
+    [self.parent.object stopScan];
+    [self finish];
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
 @interface CBECentralManagerDisconnection ()
 
 @property CBPeripheral *peripheral;
@@ -266,6 +335,7 @@
 
 @property (weak) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 @property (weak) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
+@property (weak) CBECentralManagerScanning *scanning;
 @property (weak) CBECentralManagerDisconnection *disconnection;
 @property (weak) CBECentralManagerConnection *connection;
 
@@ -286,6 +356,22 @@
     self.peripherals = NSMutableSet.set;
     
     return self;
+}
+
+- (CBECentralManagerScanning *)scanForPeripheralsWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout {
+    self.scanning = [CBECentralManagerScanning.alloc initWithServices:services options:options timeout:timeout].nseAutorelease;
+    
+    [self addOperation:self.scanning];
+    
+    return self.scanning;
+}
+
+- (CBECentralManagerScanning *)scanForPeripheralsWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion {
+    CBECentralManagerScanning *scanning = [self scanForPeripheralsWithServices:services options:options timeout:timeout];
+    
+    scanning.completion = completion;
+    
+    return scanning;
 }
 
 - (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral {
@@ -328,6 +414,9 @@
     if (central.state == CBManagerStatePoweredOn) {
     } else {
         [self.peripherals removeAllObjects];
+        
+        self.scanning.error = [NSError errorWithDomain:CBEErrorDomain code:CBEErrorPoweredOff userInfo:nil];
+        [self.scanning finish];
     }
 }
 

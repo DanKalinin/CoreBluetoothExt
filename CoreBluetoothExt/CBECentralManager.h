@@ -11,6 +11,7 @@
 @class CBECentralManager;
 @class CBECentralManagerDidDiscoverPeripheral;
 @class CBECentralManagerDidDisconnectPeripheral;
+@class CBECentralManagerScanning;
 @class CBECentralManagerDisconnection;;
 @class CBECentralManagerConnection;
 @class CBECentralManagerOperation;
@@ -93,6 +94,40 @@
 
 
 
+@protocol CBECentralManagerScanningDelegate <NSETimeoutOperationDelegate>
+
+@optional
+- (void)cbeCentralManagerScanningDidUpdateState:(CBECentralManagerScanning *)scanning;
+- (void)cbeCentralManagerScanningDidStart:(CBECentralManagerScanning *)scanning;
+- (void)cbeCentralManagerScanningDidCancel:(CBECentralManagerScanning *)scanning;
+- (void)cbeCentralManagerScanningDidFinish:(CBECentralManagerScanning *)scanning;
+
+- (void)cbeCentralManagerScanningDidUpdateProgress:(CBECentralManagerScanning *)scanning;
+
+@end
+
+
+
+@interface CBECentralManagerScanning : NSETimeoutOperation <CBECentralManagerScanningDelegate>
+
+@property (readonly) CBECentralManagerOperation *parent;
+@property (readonly) NSEMutableOrderedSet<CBECentralManagerScanningDelegate> *delegates;
+@property (readonly) NSArray<CBUUID *> *services;
+@property (readonly) NSDictionary *options;
+
+- (instancetype)initWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+
+@end
+
+
+
+
+
+
+
+
+
+
 @protocol CBECentralManagerDisconnectionDelegate <NSEOperationDelegate>
 
 @optional
@@ -161,7 +196,7 @@
 
 
 
-@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate, CBECentralManagerDisconnectionDelegate, CBECentralManagerConnectionDelegate>
+@protocol CBECentralManagerDelegate <CBEManagerDelegate, CBEPeripheralDelegate, CBECentralManagerScanningDelegate, CBECentralManagerDisconnectionDelegate, CBECentralManagerConnectionDelegate>
 
 @optional
 - (void)cbeCentralManagerDidUpdateState:(CBCentralManager *)central;
@@ -180,8 +215,12 @@
 @property (weak, readonly) CBCentralManager *object;
 @property (weak, readonly) CBECentralManagerDidDiscoverPeripheral *didDiscoverPeripheral;
 @property (weak, readonly) CBECentralManagerDidDisconnectPeripheral *didDisconnectPeripheral;
+@property (weak, readonly) CBECentralManagerScanning *scanning;
 @property (weak, readonly) CBECentralManagerDisconnection *disconnection;
 @property (weak, readonly) CBECentralManagerConnection *connection;
+
+- (CBECentralManagerScanning *)scanForPeripheralsWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout;
+- (CBECentralManagerScanning *)scanForPeripheralsWithServices:(NSArray<CBUUID *> *)services options:(NSDictionary *)options timeout:(NSTimeInterval)timeout completion:(NSEBlock)completion;
 
 - (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral;
 - (CBECentralManagerDisconnection *)disconnectPeripheral:(CBPeripheral *)peripheral completion:(NSEBlock)completion;
