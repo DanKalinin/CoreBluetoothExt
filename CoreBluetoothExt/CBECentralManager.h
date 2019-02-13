@@ -60,10 +60,10 @@
 @interface CBECentralManagerDidDiscoverPeripheral : NSEObject
 
 @property (readonly) CBPeripheral *peripheral;
-@property (readonly) CBEPeripheralAdvertisement *advertisement;
+@property (readonly) CBEAdvertisement *advertisement;
 @property (readonly) NSNumber *rssi;
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEPeripheralAdvertisement *)advertisement rssi:(NSNumber *)rssi;
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral advertisement:(CBEAdvertisement *)advertisement rssi:(NSNumber *)rssi;
 
 @end
 

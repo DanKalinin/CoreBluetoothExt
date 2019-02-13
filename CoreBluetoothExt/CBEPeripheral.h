@@ -6,11 +6,11 @@
 //
 
 #import "CBEPeer.h"
+#import "CBEAdvertisiment.h"
 #import "CBEService.h"
 #import "CBEL2CAPChannel.h"
 
 @class CBEPeripheral;
-@class CBEPeripheralAdvertisement;
 @class CBEPeripheralServicesDiscovery;
 @class CBEPeripheralCharacteristicsDiscovery;
 @class CBEPeripheralCharacteristicReading;
@@ -48,22 +48,6 @@
 
 
 @interface CBEPeripheral : CBPeripheral
-
-@end
-
-
-
-
-
-
-
-
-
-
-@interface CBEPeripheralAdvertisement : NSEDictionaryObject
-
-@property (readonly) NSArray<CBUUID *> *serviceUUIDs;
-@property (readonly) BOOL isConnectable;
 
 @end
 
@@ -217,7 +201,7 @@
 
 @interface CBEPeripheralOperation : CBEPeerOperation <CBEPeripheralDelegate, CBPeripheralDelegate>
 
-@property CBEPeripheralAdvertisement *advertisement;
+@property CBEAdvertisement *advertisement;
 @property NSNumber *rssi;
 
 @property (readonly) NSMutableDictionary<NSNumber *, CBL2CAPChannel *> *l2capChannels;
